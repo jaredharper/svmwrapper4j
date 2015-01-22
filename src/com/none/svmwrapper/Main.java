@@ -35,7 +35,8 @@ public class Main
 	private Double output(int index, double value, double[] feature_min, double[] feature_max)
 	{
 		/* skip single-valued attribute */
-		if (feature_max[index] == feature_min[index]) return null;
+		if (feature_max[index] == feature_min[index]) 
+			value = 0.0;
 
 		/* actual scaling */
 		if (value == feature_min[index])
@@ -44,12 +45,6 @@ public class Main
 			value = 1;
 		else
 			value = (value - feature_min[index]) / (feature_max[index] - feature_min[index]);
-
-		if (value != 0)
-		{
-			System.out.print(index + ":" + value + " ");
-			// new_num_nonzeros++;
-		}
 
 		return value;
 	}
