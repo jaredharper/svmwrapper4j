@@ -8,9 +8,16 @@ public class Main
 	public void scale(List<Double[]> data)
 	{
 
-		int size = data.size();
+		// Assume all input vectors are of the same size
+		int size = data.get(0).length;
 		double[] max = new double[size];
 		double[] min = new double[size];
+		
+		// Neither min nor max use default initialization value
+		for (double d : max)
+			d = Double.MIN_VALUE;		
+		for (double d : min)
+			d = Double.MAX_VALUE;
 
 		// First iteration, find global min/max
 		for (Double[] d : data)
