@@ -5,7 +5,7 @@ import java.util.List;
 public class Main
 {
 
-	public double[] scale(List<Double[]> data)
+	public void scale(List<Double[]> data)
 	{
 
 		int size = data.size();
@@ -13,55 +13,23 @@ public class Main
 		double[] min = new double[size];
 
 		// First iteration, find global min/max
-		// For each vector
-		// was while nextline()
 		for (Double[] d : data)
 		{
-			int next_index = 1;
-
-			// For each element in each vector
-			// was while st.hasmoretokens
-			for (int i = 0; i < data.size(); i++)
+			for (int i = 0; i < d.length; i++)
 			{
-
-				for (int j = next_index; j < i; j++)
-				{
-					max[i] = Math.max(max[i], 0);
-					min[i] = Math.min(min[i], 0);
-				}
-
 				max[i] = Math.max(max[i], d[i]);
 				min[i] = Math.min(min[i], d[i]);
-
-				next_index = i + 1;
-
 			}
 		}
 
 		// scale values
-		//
 		for (Double[] d : data)
 		{
-			int next_index = 1;
-			double target;
-			double value;
-
-			// ?
-			// output_target(target);
 			for (int index = 0; index < d.length; index++)
 			{
-				value = d[index];
-				for (int i = next_index; i < index; i++)
-					d[i] = output(i, 0, min, max);
-				d[index] = output(index, value, min, max);
-				next_index = index + 1;
+				d[index] = output(index, d[index], min, max);
 			}
-
-			for (int i = next_index; i <= d.length; i++)
-				output(i, 0, min, max);
-			System.out.print("\n");
 		}
-		return null;
 	}
 
 	private Double output(int index, double value, double[] feature_min, double[] feature_max)
