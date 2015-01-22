@@ -41,9 +41,16 @@ public class Main
 
 	private Double output(int index, double value, double[] feature_min, double[] feature_max)
 	{
-		/* skip single-valued attribute */
+	
+		/* 
+		 * skip single-valued attribute
+		 * 
+		 * for now just treat any scaled value outside 
+		 * the -1,1 range as a skip value.  need logic
+		 * in the train routine to check for this. 
+		 */
 		if (feature_max[index] == feature_min[index]) 
-			value = 0.0;
+			value = Double.MAX_VALUE;
 		
 		/* min/max forced to [-1,1] */
 		else if (value == feature_min[index])
