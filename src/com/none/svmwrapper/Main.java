@@ -37,12 +37,14 @@ public class Main
 		/* skip single-valued attribute */
 		if (feature_max[index] == feature_min[index]) 
 			value = 0.0;
-
-		/* actual scaling */
-		if (value == feature_min[index])
+		
+		/* min/max forced to [-1,1] */
+		else if (value == feature_min[index])
 			value = -1;
 		else if (value == feature_max[index])
 			value = 1;
+		
+		/* actual scaling calculation for common case */
 		else
 			value = (value - feature_min[index]) / (feature_max[index] - feature_min[index]);
 
