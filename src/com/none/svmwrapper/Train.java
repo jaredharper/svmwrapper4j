@@ -116,17 +116,41 @@ public class Train
 		int max_index = 0;
 
 		for (DataElement d : data)
-		{
-
+		{						
+			
 			vy.addElement((double) d.getClassLabel());
-			int m = d.getData().length;
-			svm_node[] x = new svm_node[m];
-			for (int j = 0; j < m; j++)
+			
+			Double[] thisData = d.getData();
+			
+			// Need to know how many entries are actually
+			// being used (total - DO NOT PROCESS flagged entries)
+			int numValidEntries = 0;
+			for (int k = 0; k < thisData.length; k++)
 			{
-				x[j] = new svm_node();
-				x[j].index = j;
-				x[j].value = d.getData()[j];
+				if (thisData[k] != Scale.DO_NOT_PROCESS)
+					numValidEntries++;
+				
 			}
+			
+			int m = numValidEntries;
+			svm_node[] x = new svm_node[m];			
+			for (int j = 0, k = 0; j < m; j++, k++)
+			{
+				
+				// Get next indexx:value pair from thisData that
+				// isn't flagged as DO NOT PROCESS and add to x				
+				if (thisData[k] == Scale.DO_NOT_PROCESS)
+				{					
+					while (thisData[k] == Scale.DO_NOT_PROCESS)
+						k++;
+				}
+								
+				x[j] = new svm_node();
+				x[j].index = k;
+				x[j].value = thisData[k];
+			
+			}
+			
 			if (m > 0) max_index = Math.max(max_index, x[m - 1].index);
 			vx.addElement(x);
 		}
