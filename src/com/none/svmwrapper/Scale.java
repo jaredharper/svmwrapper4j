@@ -24,11 +24,13 @@ public class Scale
 	 * 
 	 * @param data List containing the arrays to be modified
 	 */
-	public static void scale(List<Double[]> data)
+	public static void scale(List<DataElement> dv)
 	{
 
+		
+		
 		// Assume all input vectors are of the same size
-		int size = data.get(0).length;
+		int size = dv.get(0).getData().length;
 		double[] max = new double[size];
 		double[] min = new double[size];
 		
@@ -39,8 +41,9 @@ public class Scale
 			d = Double.MAX_VALUE;
 
 		// First iteration, find global min/max
-		for (Double[] d : data)
+		for (DataElement element : dv)
 		{
+			Double[] d = element.getData();
 			for (int i = 0; i < d.length; i++)
 			{
 				max[i] = Math.max(max[i], d[i]);
@@ -49,8 +52,9 @@ public class Scale
 		}
 
 		// scale values
-		for (Double[] d : data)
+		for (DataElement element : dv)
 		{
+			Double[] d = element.getData();
 			for (int index = 0; index < d.length; index++)
 			{
 			
