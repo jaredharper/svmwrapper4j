@@ -16,7 +16,10 @@ import libsvm.svm_problem;
 
 /**
  * This class contains logic to create, train and cross-validate
- * the SVM/SVR
+ * the SVM/SVR.<br>
+ * 
+ * To use: <br> call CTOR <br>call setData() with your data<br> call train()<br> then get the populated
+ * model with getModel()
  * 
  * @author jharper
  *
@@ -33,7 +36,92 @@ public class Train
 	private int cross_validation;
 	private int nr_fold;
 	private List<DataElement> data;
+
+	/**
+	 * Accessor for the svm_model that will be populated
+	 * based on provided data
+	 */
+	public svm_model getModel()
+	{
+		return model;
+	}
 	
+	/**
+	 * Mutator for the input data needed to create the model
+	 * 
+	 * @param d - a List of {@link DataElement}
+	 */
+	public void setData(List<DataElement> d)
+	{
+		data = d;
+	}
+	
+	/**
+	 * CTOR uses the libsvm default values for now
+	 * 
+	 */
+	public Train()
+	{
+		
+		// Initialize param with default values
+		param = new svm_parameter();
+		
+		param.svm_type = svm_parameter.C_SVC;
+		param.kernel_type = svm_parameter.RBF;
+		param.degree = 3;
+		param.gamma = 0;	// 1/num_features
+		param.coef0 = 0;
+		param.nu = 0.5;
+		param.cache_size = 100;
+		param.C = 1;
+		param.eps = 1e-3;
+		param.p = 0.1;
+		param.shrinking = 1;
+		param.probability = 0;
+		param.nr_weight = 0;
+		param.weight_label = new int[0];
+		param.weight = new double[0];
+		cross_validation = 0;
+		
+		// XXX TODO FIXME
+		// reimplement parsing for optional svm arguments
+		
+	}
+	
+	
+	/**
+	 * This method creates an svm_model and optionally
+	 * does k-fold cross validation
+	 * 
+	 * @throws IOException
+	 */
+	public void train() throws IOException
+	{
+		// parse_command_line(argv);
+		read_problem();
+		error_msg = svm.svm_check_parameter(prob, param);
+
+		if (error_msg != null)
+		{
+			System.err.print("ERROR: " + error_msg + "\n");
+			System.exit(1);
+		}
+
+		if (cross_validation != 0)
+		{
+			do_cross_validation();
+		}
+		else
+		{
+			model = svm.svm_train(prob, param);
+			svm.svm_save_model(model_file_name, model);
+		}
+	}
+	
+	/**
+	 * Optionally perform k-fold
+	 * 
+	 */
 	private void do_cross_validation()
 	{
 		int i;
@@ -68,47 +156,11 @@ public class Train
 		}
 	}
 
-	private void run(String argv[]) throws IOException
-	{
-		// parse_command_line(argv);
-		read_problem();
-		error_msg = svm.svm_check_parameter(prob, param);
-
-		if (error_msg != null)
-		{
-			System.err.print("ERROR: " + error_msg + "\n");
-			System.exit(1);
-		}
-
-		if (cross_validation != 0)
-		{
-			do_cross_validation();
-		}
-		else
-		{
-			model = svm.svm_train(prob, param);
-			svm.svm_save_model(model_file_name, model);
-		}
-	}
-
-	private static double atof(String s)
-	{
-		double d = Double.valueOf(s).doubleValue();
-		if (Double.isNaN(d) || Double.isInfinite(d))
-		{
-			System.err.print("NaN or Infinity in input\n");
-			System.exit(1);
-		}
-		return (d);
-	}
-
-	private static int atoi(String s)
-	{
-		return Integer.parseInt(s);
-	}
-
-	// read in a problem (in svmlight format)
-
+	/**
+	 * read in a problem (in svmlight format)
+	 * 
+	 * @throws IOException
+	 */
 	private void read_problem() throws IOException
 	{
 		Vector<Double> vy = new Vector<Double>();
