@@ -137,13 +137,10 @@ public class Train
 			for (int j = 0, k = 0; j < m; j++, k++)
 			{
 				
-				// Get next indexx:value pair from thisData that
+				// Get next index:value pair from thisData that
 				// isn't flagged as DO NOT PROCESS and add to x				
-				if (thisData[k] == Scale.DO_NOT_PROCESS)
-				{					
-					while (thisData[k] == Scale.DO_NOT_PROCESS)
-						k++;
-				}
+				while (thisData[k] == Scale.DO_NOT_PROCESS)
+					k++;
 								
 				x[j] = new svm_node();
 				x[j].index = k;
