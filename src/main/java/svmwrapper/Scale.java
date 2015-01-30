@@ -35,10 +35,11 @@ public class Scale
 		double[] min = new double[size];
 		
 		// Neither min nor max use default initialization value
-		for (double d : max)
-			d = Double.MIN_VALUE;		
-		for (double d : min)
-			d = Double.MAX_VALUE;
+		for (int i = 0; i < max.length; i++)
+		{
+			max[i] = Double.MIN_VALUE;		
+			min[i] = Double.MAX_VALUE;
+		}
 
 		// First iteration, find global min/max
 		for (DataElement element : dv)
