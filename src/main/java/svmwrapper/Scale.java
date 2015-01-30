@@ -19,8 +19,8 @@ public class Scale
 	public static final double DO_NOT_PROCESS = Double.MAX_VALUE;
 	
 	/**
-	 * This method takes a collection of data arrays and
-	 * scales them to fit (-1,1)
+	 * This method takes a collection of DataElement objects and
+	 * scales their data to fit (-1,1)
 	 * 
 	 * @param data List containing the arrays to be modified
 	 */
