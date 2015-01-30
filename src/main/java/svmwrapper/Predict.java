@@ -1,4 +1,4 @@
-package com.none.svmwrapper;
+package svmwrapper;
 
 import java.io.IOException;
 import java.util.List;

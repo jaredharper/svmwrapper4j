@@ -1,4 +1,4 @@
-package com.none.svmwrapper;
+package svmwrapper;
 
 /**
  * POJO wrapper for a data element used by libSVM
