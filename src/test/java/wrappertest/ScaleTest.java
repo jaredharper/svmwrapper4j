@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import svmwrapper.DataElement;
 import svmwrapper.Scale;
+import svmwrapper.Train;
 
 
 public class ScaleTest
@@ -39,9 +40,11 @@ public class ScaleTest
 	public void test()
 	{
 
-		// Read input data		
+		
 		try (BufferedReader r = new BufferedReader(new FileReader(new File("src/test/data/sample.txt"))))
 		{
+
+			// Read input data
 			ArrayList<DataElement> elements = new ArrayList<>();
 			for (String line = r.readLine(); line != null; line = r.readLine())
 			{
@@ -95,6 +98,15 @@ public class ScaleTest
 						fail();
 				}
 			}
+			
+			// Attempt train and cross validation
+			Train t = new Train();
+			t.setData(elements);
+			t.train();
+			
+			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy() + System.lineSeparator() +
+					"Error:" + t.getError());
+
 		}
 		catch (Exception ex)
 		{
