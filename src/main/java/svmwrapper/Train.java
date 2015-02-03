@@ -87,10 +87,12 @@ public class Train
 		// Initialize param with default values
 		param = new svm_parameter();
 		
-		param.svm_type = svm_parameter.EPSILON_SVR;
+		param.svm_type = svm_parameter.NU_SVR;
 		param.kernel_type = svm_parameter.SIGMOID;
 		param.degree = 3;
+		param.eps = 0.1;
 		param.nu = 0.15;
+		param.C = 1;
 		param.cache_size = 100;
 		param.p = 0.35;
 		param.shrinking = 1;
@@ -98,6 +100,8 @@ public class Train
 		param.nr_weight = 0;
 		param.weight_label = new int[0];
 		param.weight = new double[0];
+		
+		nr_fold = 6;
 		cross_validation = 1;
 		
 		// XXX TODO FIXME
