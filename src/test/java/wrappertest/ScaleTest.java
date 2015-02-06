@@ -5,10 +5,6 @@ import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -19,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import svmwrapper.DataElement;
+import svmwrapper.Predict;
 import svmwrapper.Scale;
 import svmwrapper.Train;
 
@@ -53,8 +50,17 @@ public class ScaleTest
 				String[] components = line.split(" ");
 				
 				// Get the first token in the line, which is a class label
-				int label = Integer.parseInt(components[0]);
-				de.setClassLabel(label);
+				try
+				{
+					int label = Integer.parseInt(components[0]);
+					de.setClassLabel(label);	
+					de.setLabeled(true);
+				}
+				catch (NumberFormatException nfx)
+				{
+					de.setLabeled(false);
+				}
+
 				
 				// Get the index:value pairs
 				// This does NOT support sparse Arrays
@@ -99,13 +105,35 @@ public class ScaleTest
 				}
 			}
 			
+			// Split the list into train and test setsz
+			ArrayList<DataElement> trainList = new ArrayList<DataElement>();			
+			ArrayList<DataElement> predictList = new ArrayList<DataElement>();			
+			for (DataElement e : elements)
+			{
+				if (e.isLabeled() == true)
+					trainList.add(e);
+				else if (e.isLabeled() == false)
+					predictList.add(e);
+			}
+			
 			// Attempt train and cross validation
 			Train t = new Train();
-			t.setData(elements);
+			t.setData(trainList);
 			t.train();
-			
+
 			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy() + System.lineSeparator() +
 					"Error:" + t.getError());
+			
+			// Classify unlabeled samples
+			Predict.predict(t.getModel(), 0, predictList);
+			
+			// Check labels
+			for (DataElement e : predictList)
+			{
+				Logger.getAnonymousLogger().log(Level.INFO,"Added label " +e.getClassLabel());
+				if (e.isLabeled() == false)
+					fail();
+			}
 
 		}
 		catch (Exception ex)
