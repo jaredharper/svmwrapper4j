@@ -44,8 +44,35 @@ public class ScaleTest
 		ArrayList<DataElement> computed = new ArrayList<>();
 		ArrayList<DataElement> cliScaled = new ArrayList<>();
 
+		readFile(computed, "src/test/data/unscaled_sample.txt");
+		readFile(cliScaled, "src/test/data/scaled_sample.txt");
+		
+		// Perform scale operation		
+		Scale.scale(computed);	
+		
+		// Compare computed scaled values to known values
+		if (cliScaled.size() != computed.size())
+		{
+			fail();
+		}
+		for (int i = 0; i < cliScaled.size(); i++)
+		{
+			Double[] cli = cliScaled.get(i).getData();
+			Double[] gen = computed.get(i).getData();
+			
+			for (int j = 0; j < cli.length; j++)
+			{
+				if (cli[j] != gen[j])
+					fail();
+			}
+		}
+	}
+	
+	
+	private void readFile(ArrayList<DataElement> elts, String filename)
+	{
 		// Get the unscaled sample data and load it into elements
-		try (BufferedReader r = new BufferedReader(new FileReader(new File("src/test/data/unscaled_sample.txt"))))
+		try (BufferedReader r = new BufferedReader(new FileReader(new File(filename))))
 		{
 
 			// Read unscaled input data			
@@ -94,42 +121,12 @@ public class ScaleTest
 				data.toArray(d);
 				de.setData(d);
 				
-				computed.add(de);
+				elts.add(de);
 			}			
 		}
 		catch (Exception ex)
 		{
 			
-		}
-		
-		// Get the scaled sample data and load it into scaledElements
-		try(BufferedReader r2 = new BufferedReader(new FileReader(new File("src/test/data/scaled_sample.txt"))))
-		{
-			
-		}
-		catch (Exception ex)
-		{
-			
-		}
-		
-		// Perform scale operation		
-		Scale.scale(computed);	
-		
-		// Compare computed scaled values to known values
-		if (cliScaled.size() != computed.size())
-		{
-			fail();
-		}
-		for (int i = 0; i < cliScaled.size(); i++)
-		{
-			Double[] cli = cliScaled.get(i).getData();
-			Double[] gen = computed.get(i).getData();
-			
-			for (int j = 0; j < cli.length; j++)
-			{
-				if (cli[j] != gen[j])
-					fail();
-			}
 		}
 	}
 
