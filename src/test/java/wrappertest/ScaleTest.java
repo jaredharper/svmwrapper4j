@@ -125,7 +125,7 @@ public class ScaleTest
 					"Error:" + t.getError());
 			
 			// Classify unlabeled samples
-			Predict.predict(t.getModel(), 0, predictList);
+			Predict.predict(t.getModel(), 0, elements);
 			
 			// Check labels
 			for (DataElement e : predictList)
