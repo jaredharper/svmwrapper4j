@@ -37,6 +37,9 @@ public class ScaleTest
 	{
 	}
 
+	/**
+	 * Scale and compare
+	 */
 	@Test
 	public void test()
 	{
@@ -68,7 +71,12 @@ public class ScaleTest
 		}
 	}
 	
-	
+	/**
+	 * Read filename in, convert to DataElement ArrayList, load in elts
+	 * 
+	 * @param elts
+	 * @param filename
+	 */
 	private void readFile(ArrayList<DataElement> elts, String filename)
 	{
 		// Get the unscaled sample data and load it into elements
