@@ -27,7 +27,7 @@ public class Predict
 		Logger.getAnonymousLogger().log(Level.INFO,s);
 	}
 
-	private static void predict(svm_model model, int predict_probability, List<DataElement> data) throws IOException
+	public static void predict(svm_model model, int predict_probability, List<DataElement> data) throws IOException
 	{
 		int correct = 0;
 		int total = 0;
@@ -77,6 +77,13 @@ public class Predict
 			{
 				v = svm.svm_predict(model,x);
 			}
+			
+			if (d.isLabeled() == false)
+			{
+				d.setClassLabel(v);
+				d.setLabeled(true);
+			}
+				
 
 			if(v == target)
 				++correct;

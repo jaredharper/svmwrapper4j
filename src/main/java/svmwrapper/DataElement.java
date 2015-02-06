@@ -11,7 +11,7 @@ package svmwrapper;
 public class DataElement
 {
 	private Double[] data;
-	private int classLabel;
+	private double classLabel;
 	private boolean isLabeled;	
 	
 	public boolean isLabeled()
@@ -34,14 +34,14 @@ public class DataElement
 		this.data = data;
 	}
 	
-	public int getClassLabel()
+	public double getClassLabel()
 	{
 		return classLabel;
 	}
 	
-	public void setClassLabel(int classLabel)
+	public void setClassLabel(double v)
 	{
-		this.classLabel = classLabel;
+		this.classLabel = v;
 	}
 
 }
