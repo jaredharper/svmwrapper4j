@@ -12,7 +12,18 @@ public class DataElement
 {
 	private Double[] data;
 	private int classLabel;
+	private boolean isLabeled;	
 	
+	public boolean isLabeled()
+	{
+		return isLabeled;
+	}
+	
+	public void setLabeled(boolean isLabeled)
+	{
+		this.isLabeled = isLabeled;
+	}
+
 	public Double[] getData()
 	{
 		return data;
