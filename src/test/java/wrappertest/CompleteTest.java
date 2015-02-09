@@ -100,7 +100,7 @@ public class CompleteTest
 				Double[] d = e.getData();
 				for (Double value : d)
 				{
-					if (value < -1.0 || value > 1.0)
+					if ((value < -1.0 || value > 1.0) && value != Scale.DO_NOT_PROCESS)
 						fail();
 				}
 			}
