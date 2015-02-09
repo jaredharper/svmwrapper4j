@@ -37,7 +37,7 @@ public class Scale
 		// Neither min nor max use default initialization value
 		for (int i = 0; i < max.length; i++)
 		{
-			max[i] = Double.MIN_VALUE;		
+			max[i] = -Double.MAX_VALUE;		
 			min[i] = Double.MAX_VALUE;
 		}
 
