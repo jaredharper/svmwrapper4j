@@ -77,7 +77,7 @@ public class Scale
 				
 				/* actual scaling calculation for common case */
 				else
-					d[index] = (d[index] - min[index]) / (max[index] - min[index]);
+					d[index] = -1.0 + 2.0 * (d[index] - min[index]) / (max[index] - min[index]);
 			}
 		}
 	}
