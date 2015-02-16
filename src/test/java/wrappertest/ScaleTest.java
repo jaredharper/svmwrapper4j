@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import svmwrapper.DataElement;
@@ -40,6 +41,7 @@ public class ScaleTest
 	/**
 	 * Scale and compare
 	 */
+	@Ignore
 	@Test
 	public void test()
 	{

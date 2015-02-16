@@ -13,6 +13,7 @@ public class DataElement
 	private Double[] data;
 	private double classLabel;
 	private boolean isLabeled;	
+	private int databaseId;
 	
 	public boolean isLabeled()
 	{
@@ -42,6 +43,16 @@ public class DataElement
 	public void setClassLabel(double v)
 	{
 		this.classLabel = v;
+	}
+
+	public int getDatabaseId()
+	{
+		return databaseId;
+	}
+
+	public void setDatabaseId(int databaseId)
+	{
+		this.databaseId = databaseId;
 	}
 
 }
