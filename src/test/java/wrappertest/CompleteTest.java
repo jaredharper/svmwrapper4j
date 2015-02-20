@@ -119,6 +119,7 @@ public class CompleteTest
 			// Attempt train and cross validation
 			Train t = new Train();
 			t.setData(trainList);
+			t.autoconfigureNuSVC();
 			t.train();
 
 			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy() + System.lineSeparator() +

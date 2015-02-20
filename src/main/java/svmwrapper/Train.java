@@ -1,6 +1,7 @@
 package svmwrapper;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -25,8 +26,8 @@ import libsvm.svm_problem;
 public class Train
 {
 
-	private svm_parameter param;	// set by parse_command_line
-	private svm_problem prob;		// set by read_problem
+	private svm_parameter param;
+	private svm_problem prob;
 	private svm_model model;
 	private String error_msg;
 	private int cross_validation;
@@ -37,7 +38,7 @@ public class Train
 
 	/**
 	 * Accessor for the svm_model that will be populated
-	 * based on provided data
+	 * based on provided data.  This is needed by Predict.
 	 */
 	public svm_model getModel()
 	{
@@ -78,23 +79,133 @@ public class Train
 	}
 	
 	/**
+	 * Mutator for the svm_parameter object that handles
+	 * configuration details for training the model.
+	 * 
+	 * Use this if you understand the technical details
+	 * behind svm type / kernel details and want to
+	 * configured an svm_parameter object manually.
+	 * 
+	 * @param param
+	 */
+	public void setParam(svm_parameter param)
+	{
+		this.param = param;
+	}
+	
+	/**
+	 * Accessor for the svm_parameter object that handles
+	 * configuration details for training the model.
+	 * 
+	 * @return
+	 */
+	public svm_parameter getParam()
+	{
+		return param;
+	}
+	
+	/**
+	 * This method will set the svm type to Nu SVC
+	 * and attempt to find a nu value that best
+	 * fits the data
+	 * 
+	 * @throws Exception - On unrecoverable error 
+	 * 
+	 */
+	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
+	{
+		param.svm_type = svm_parameter.C_SVC;
+		param.kernel_type = svm_parameter.SIGMOID;
+		
+		double bestAccuracy = 0;
+		HashMap<Double, Double> results = new HashMap<>();
+		
+		double[] nuVals = {0.1, 0.25, 0.33, 0.40, 0.5, 0.66, 0.75, 0.8, 0.95};
+		for (double n : nuVals)
+		{
+			param.nu = n;
+			read_problem();
+			
+			error_msg = svm.svm_check_parameter(prob, param);
+			if (error_msg != null)
+			{
+				Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
+				throw new Exception("Error with parameter object");
+			}				
+			
+			do_cross_validation();
+			
+			results.put(param.nu, accuracy);
+		}
+
+		for (Double key : results.keySet())
+		{
+			double accuracy = results.get(key);
+			if (accuracy > bestAccuracy)
+			{
+				bestAccuracy = accuracy;
+				param.nu = key;
+			}
+		}	
+		
+		accuracy = bestAccuracy;
+		
+		return results;
+	}
+	
+	/**
+	 * This method will set the type to Nu SVR
+	 * and attempt to find a nu value that best
+	 * fits the data
+	 */
+	public void autoconfigureNuSVR()
+	{
+		
+	}
+	
+	/**
+	 * This method will set the svm type to C SVC
+	 * and attempt to find a C value that best fits
+	 * the data
+	 */
+	public void autoconfigureC()
+	{
+		
+	}
+	
+	/**
+	 * This method will set the type to Epsilon SVR
+	 * and attempt to find an e value that best fits
+	 * the data
+	 * 
+	 */
+	public void autoconfigureEpSVR()
+	{
+		
+	}
+	
+	/**
 	 * CTOR uses the libsvm default values for now
+	 * 
+	 * For optimal results configure the svm parameters based
+	 * on your data or at least use one of the automagic configuration 
+	 * methods
 	 * 
 	 */
 	public Train()
 	{
 		
-		// Initialize param with default values
+		// Initialize with some default values
 		param = new svm_parameter();
 		
-		param.svm_type = svm_parameter.NU_SVR;
+		param.svm_type = svm_parameter.NU_SVC;
 		param.kernel_type = svm_parameter.SIGMOID;
 		param.degree = 3;
 		param.eps = 0.1;
-		param.nu = 0.15;
+		param.nu = 0.95;
 		param.C = 1;
 		param.cache_size = 100;
-		param.p = 0.35;
+		param.p = 0.755;
 		param.shrinking = 1;
 		param.probability = 0;
 		param.nr_weight = 0;
@@ -102,11 +213,8 @@ public class Train
 		param.weight = new double[0];
 		
 		nr_fold = 6;
-		cross_validation = 1;
-		
-		// XXX TODO FIXME
-		// reimplement parsing for optional svm arguments
-		
+		cross_validation = 0;
+
 	}
 	
 	
@@ -134,8 +242,6 @@ public class Train
 		else
 		{
 			model = svm.svm_train(prob, param);
-			
-			//XXX TODO FIXME serialize model and save to db
 		}
 	}
 	
@@ -182,7 +288,7 @@ public class Train
 	 * 
 	 * @throws IOException
 	 */
-	private void read_problem() throws IOException
+	private void read_problem()
 	{
 		Vector<Double> vy = new Vector<Double>();
 		Vector<svm_node[]> vx = new Vector<svm_node[]>();
