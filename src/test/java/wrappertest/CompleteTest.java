@@ -19,7 +19,13 @@ import svmwrapper.Predict;
 import svmwrapper.Scale;
 import svmwrapper.Train;
 
-
+/**
+ * As implied, this is an end-to-end test demonstrating a complete workflow
+ * (data gathering, scaling, training and ultimately prediction)
+ * 
+ * @author jharper
+ *
+ */
 public class CompleteTest
 {
 
@@ -33,6 +39,9 @@ public class CompleteTest
 	{
 	}
 
+	/**
+	 * End to end test of svmwrapper
+	 */
 	@Test
 	public void test()
 	{
@@ -54,11 +63,10 @@ public class CompleteTest
 				{
 					int label = Integer.parseInt(components[0]);
 					de.setClassLabel(label);	
-					de.setLabeled(true);
 				}
 				catch (NumberFormatException nfx)
 				{
-					de.setLabeled(false);
+					// Unlabeled data is expected
 				}
 
 				

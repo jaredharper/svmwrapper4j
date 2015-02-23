@@ -95,7 +95,6 @@ public class Predict
 			if (d.isLabeled() == false)
 			{
 				d.setClassLabel(v);
-				d.setLabeled(true);
 			}
 				
 

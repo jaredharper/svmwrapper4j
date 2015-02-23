@@ -99,11 +99,10 @@ public class ScaleTest
 				{
 					int label = Integer.parseInt(components[0]);
 					de.setClassLabel(label);	
-					de.setLabeled(true);
 				}
 				catch (NumberFormatException nfx)
 				{
-					de.setLabeled(false);
+					// Unlabeled data is expected
 				}
 
 				

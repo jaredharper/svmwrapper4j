@@ -19,7 +19,7 @@ public class Scale
 	 * This method takes a collection of DataElement objects and
 	 * scales their data to fit (-1,1)
 	 * 
-	 * @param data List containing the arrays to be modified
+	 * @param dv List containing the {@link DataElement} objects to be modified
 	 */
 	public static void scale(List<DataElement> dv)
 	{
