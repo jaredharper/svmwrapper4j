@@ -133,6 +133,7 @@ public class Train
 				throw new Exception("Error with parameter object");
 			}				
 			
+			nr_fold = data.size();
 			do_cross_validation();
 			
 			results.put(param.nu, accuracy);
@@ -219,37 +220,51 @@ public class Train
 	
 	
 	/**
-	 * This method creates an svm_model and optionally
-	 * does k-fold cross validation
+	 * This method creates an svm_model based
+	 * on the provided data and configuration details
+	 * 
+	 * You should either call one of the automagic configuration
+	 * methods or manually configure your svm_model object before
+	 * calling this method
+	 * 
+	 * @throws Exception on unrecoverable error
 	 * 
 	 */
-	public void train()
+	public void train() throws Exception
 	{
 		read_problem();
+		
 		error_msg = svm.svm_check_parameter(prob, param);
-
 		if (error_msg != null)
 		{
 			Logger.getAnonymousLogger().log(Level.SEVERE,"ERROR: " + error_msg);
-			System.exit(1);
+			throw new Exception("Unrecoverable error while setting parameters");
 		}
-
-		if (cross_validation != 0)
-		{
-			do_cross_validation();
-		}
-		else
-		{
-			model = svm.svm_train(prob, param);
-		}
+		
+		model = svm.svm_train(prob, param);
 	}
 	
 	/**
-	 * Optionally perform k-fold
+	 * Perform k-fold
+	 * 
+	 * Note that the k value is part of the svm_parameter object and should
+	 * be set before calling this method
+	 * 
+	 * @throws Exception on unrecoverable error
 	 * 
 	 */
-	private void do_cross_validation()
+	public void do_cross_validation() throws Exception
 	{
+		
+		read_problem();
+		
+		error_msg = svm.svm_check_parameter(prob, param);
+		if (error_msg != null)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"ERROR: " + error_msg);
+			throw new Exception("Unrecoverable error while setting parameters");
+		}
+		
 		int i;
 		int total_correct = 0;
 		double total_error = 0;
@@ -283,7 +298,7 @@ public class Train
 	}
 
 	/**
-	 * read in a problem (in svmlight format)
+	 * Convert the DataElement List to svm_node and svm_problem objects
 	 * 
 	 * @throws IOException
 	 */
