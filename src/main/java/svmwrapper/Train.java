@@ -15,9 +15,11 @@ import libsvm.svm_problem;
 
 /**
  * This class contains logic to create, train and cross-validate
- * the SVM/SVR.<br><br>Code is a simplified version of libsvm's svm_train.java<br><br>
+ * the SVM/SVR.<br><br>
  * 
- * To use: <br> instantiate <br>call setData() with your data<br> call train()<br> then get the populated
+ * Code is a simplified version of libsvm's svm_train.java<br><br>
+ * 
+ * To use: <br> instantiate <br>call setData() with your data<br> call an autoconfigure method<br> call train()<br> then get the populated
  * model with getModel()
  * 
  * @author jharper
@@ -30,7 +32,6 @@ public class Train
 	private svm_problem prob;
 	private svm_model model;
 	private String error_msg;
-	private int cross_validation;
 	private int nr_fold;
 	private double accuracy;
 	private double error;
@@ -186,7 +187,7 @@ public class Train
 	}
 	
 	/**
-	 * CTOR uses the libsvm default values for now
+	 * CTOR uses arbitrary default values<br><br>
 	 * 
 	 * For optimal results configure the svm parameters based
 	 * on your data or at least use one of the automagic configuration 
@@ -214,14 +215,13 @@ public class Train
 		param.weight = new double[0];
 		
 		nr_fold = 6;
-		cross_validation = 0;
 
 	}
 	
 	
 	/**
 	 * This method creates an svm_model based
-	 * on the provided data and configuration details
+	 * on the provided data and configuration details<br><br>
 	 * 
 	 * You should either call one of the automagic configuration
 	 * methods or manually configure your svm_model object before
@@ -245,7 +245,7 @@ public class Train
 	}
 	
 	/**
-	 * Perform k-fold
+	 * Perform k-fold<br><br>
 	 * 
 	 * Note that the k value is part of the svm_parameter object and should
 	 * be set before calling this method
@@ -255,6 +255,9 @@ public class Train
 	 */
 	public void do_cross_validation() throws Exception
 	{
+		
+		if (nr_fold == 0)
+			throw new Exception("Cannot perform k-fold with a k value of 0");
 		
 		read_problem();
 		
