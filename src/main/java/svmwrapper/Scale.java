@@ -14,11 +14,6 @@ public class Scale
 {
 
 	/**
-	 * Flag to note that an array value should be skipped when creating a model
-	 */
-	public static final double DO_NOT_PROCESS = Double.MAX_VALUE;
-	
-	/**
 	 * This method takes a collection of DataElement objects and
 	 * scales their data to fit (-1,1)
 	 * 
@@ -67,7 +62,7 @@ public class Scale
 				 * in the train routine to check for this. 
 				 */
 				if (max[index] == min[index]) 
-					d[index] = Scale.DO_NOT_PROCESS;
+					d[index] = DataElement.DO_NOT_PROCESS;
 				
 				/* min/max forced to [-1,1] */
 				else if (d[index] == min[index])

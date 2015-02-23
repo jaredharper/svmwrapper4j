@@ -67,7 +67,7 @@ public class ScaleTest
 			
 			for (int j = 0; j < cli.length; j++)
 			{
-				if (cli[j] == Scale.DO_NOT_PROCESS)
+				if (cli[j] == DataElement.DO_NOT_PROCESS)
 					continue;
 				else if (cli[j] != gen[j])
 					fail();

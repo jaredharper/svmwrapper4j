@@ -15,6 +15,11 @@ public class DataElement
 	private boolean isLabeled;	
 	private int databaseId;
 	
+	/**
+	 * Flag to note that an array value should be skipped when creating a model
+	 */
+	public static final Double DO_NOT_PROCESS = null;
+	
 	public boolean isLabeled()
 	{
 		return isLabeled;

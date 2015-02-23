@@ -306,7 +306,7 @@ public class Train
 			int numValidEntries = 0;
 			for (int k = 0; k < thisData.length; k++)
 			{
-				if (thisData[k] != Scale.DO_NOT_PROCESS)
+				if (thisData[k] != DataElement.DO_NOT_PROCESS)
 					numValidEntries++;				
 			}
 			
@@ -317,7 +317,7 @@ public class Train
 				
 				// Get next index:value pair from thisData that
 				// isn't flagged as DO NOT PROCESS and add to x				
-				while (thisData[k] == Scale.DO_NOT_PROCESS)
+				while (thisData[k] == DataElement.DO_NOT_PROCESS)
 					k++;
 								
 				x[j] = new svm_node();
