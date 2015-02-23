@@ -114,7 +114,7 @@ public class Train
 	 */
 	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
 	{
-		param.svm_type = svm_parameter.C_SVC;
+		param.svm_type = svm_parameter.NU_SVC;
 		param.kernel_type = svm_parameter.SIGMOID;
 		
 		double bestAccuracy = 0;
