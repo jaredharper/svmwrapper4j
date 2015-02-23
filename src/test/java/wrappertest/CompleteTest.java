@@ -113,7 +113,7 @@ public class CompleteTest
 				}
 			}
 			
-			// Split the list into train and test setsz
+			// Split the list into train and test sets
 			ArrayList<DataElement> trainList = new ArrayList<DataElement>();			
 			ArrayList<DataElement> predictList = new ArrayList<DataElement>();			
 			for (DataElement e : elements)
