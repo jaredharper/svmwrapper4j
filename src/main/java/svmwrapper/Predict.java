@@ -22,12 +22,26 @@ import libsvm.svm_parameter;
 public class Predict
 {
 
+	/**
+	 * Legacy method from libsvm - here it simply logs the message
+	 * rather than printing directly to the output device
+	 * 
+	 * @param s - Message to be logged
+	 */
 	static void info(String s) 
 	{
 		Logger.getAnonymousLogger().log(Level.INFO,s);
 	}
 
-	public static void predict(svm_model model, int predict_probability, List<DataElement> data) throws IOException
+	/**
+	 * This method fills in the predicted class label for unlabeled data.
+	 * 
+	 * @param model - the svm_model object created/populated by Train
+	 * @param predict_probability - whether or not to predict probability estimates
+	 * @param data - List of {@link DataElement} objects representing the data to be classified
+	 * 
+	 */
+	public static void predict(svm_model model, int predict_probability, List<DataElement> data)
 	{
 		int correct = 0;
 		int total = 0;

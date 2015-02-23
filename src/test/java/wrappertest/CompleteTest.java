@@ -122,8 +122,7 @@ public class CompleteTest
 			t.autoconfigureNuSVC();
 			t.train();
 
-			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy() + System.lineSeparator() +
-					"Error:" + t.getError());
+			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy());
 			
 			// Classify unlabeled samples
 			Predict.predict(t.getModel(), 0, elements);

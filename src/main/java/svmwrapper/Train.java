@@ -222,9 +222,8 @@ public class Train
 	 * This method creates an svm_model and optionally
 	 * does k-fold cross validation
 	 * 
-	 * @throws IOException
 	 */
-	public void train() throws IOException
+	public void train()
 	{
 		read_problem();
 		error_msg = svm.svm_check_parameter(prob, param);

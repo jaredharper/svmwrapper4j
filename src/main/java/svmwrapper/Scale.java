@@ -3,9 +3,11 @@ package svmwrapper;
 import java.util.List;
 
 /**
- * This class contains logic to handle scaling operations.
+ * This class contains logic to handle scaling operations.<br><br>
  * 
- * Code is a simplified implementation of libSVM's provided svm_scale.java
+ * Currently scalining is fixed at -1,1<br><br>
+ * 
+ * Code is a simplified implementation of libSVM's provided svm_scale.java<br><br>
  * 
  * @author jharper
  *
