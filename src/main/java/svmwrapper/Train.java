@@ -128,6 +128,10 @@ public class Train
 			read_problem();
 			
 			error_msg = svm.svm_check_parameter(prob, param);
+			if (error_msg != null && error_msg.equals("specified nu is infeasible"))
+			{
+				continue;
+			}
 			if (error_msg != null)
 			{
 				Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
