@@ -115,8 +115,26 @@ public class Train
 	 */
 	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
 	{
+
+		param = new svm_parameter();
+		
 		param.svm_type = svm_parameter.NU_SVC;
 		param.kernel_type = svm_parameter.SIGMOID;
+
+		param.nu = 0.95;
+		param.gamma = 1d / (double) data.size();
+		param.coef0 = 0;
+		
+		param.p = 0.755;
+
+		param.cache_size = 100;		
+		param.shrinking = 1;
+		param.probability = 0;		
+		param.nr_weight = 0;
+		param.weight_label = new int[0];
+		param.weight = new double[0];
+		
+		nr_fold = 6;
 		
 		double bestAccuracy = 0;
 		HashMap<Double, Double> results = new HashMap<>();
@@ -154,8 +172,7 @@ public class Train
 			}
 		}	
 		
-		accuracy = bestAccuracy;
-		
+		accuracy = bestAccuracy;		
 		return results;
 	}
 	
@@ -165,7 +182,7 @@ public class Train
 	 * fits the data
 	 */
 	public void autoconfigureNuSVR()
-	{
+	{		
 		
 	}
 	
@@ -187,6 +204,50 @@ public class Train
 	 */
 	public void autoconfigureEpSVR()
 	{
+	
+		param = new svm_parameter();
+		
+		param.svm_type = svm_parameter.EPSILON_SVR;
+		param.kernel_type = svm_parameter.SIGMOID;
+
+		param.gamma = 0.000976563;
+		param.coef0 = 0;		
+		param.p = 0.25;
+
+		param.eps = 0.001;
+		param.C = 1;
+
+		param.nu = 0.5;
+		param.degree = 3;
+		param.cache_size = 100;		
+		param.shrinking = 1;
+		param.probability = 0;		
+		param.nr_weight = 0;
+		param.weight_label = new int[0];
+		param.weight = new double[0];
+		
+		nr_fold = 6;
+		
+		read_problem();
+		
+		error_msg = svm.svm_check_parameter(prob, param);
+		if (error_msg != null && error_msg.equals("specified nu is infeasible"))
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"nu is infeasible");
+		}
+		if (error_msg != null)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
+		}				
+
+		try
+		{
+			do_cross_validation();
+		}
+		catch (Exception e)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"error in k fold " + e.getMessage());
+		}
 		
 	}
 	
@@ -201,24 +262,7 @@ public class Train
 	public Train()
 	{
 		
-		// Initialize with some default values
-		param = new svm_parameter();
-		
-		param.svm_type = svm_parameter.NU_SVC;
-		param.kernel_type = svm_parameter.SIGMOID;
-		param.degree = 3;
-		param.eps = 0.1;
-		param.nu = 0.95;
-		param.C = 1;
-		param.cache_size = 100;
-		param.p = 0.755;
-		param.shrinking = 1;
-		param.probability = 0;
-		param.nr_weight = 0;
-		param.weight_label = new int[0];
-		param.weight = new double[0];
-		
-		nr_fold = 6;
+
 
 	}
 	
