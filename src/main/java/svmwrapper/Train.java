@@ -59,10 +59,7 @@ public class Train
 	/**
 	 * Get model error as computed by do_cross_validation().
 	 * 
-	 * @return double representing error if SVR was used.  Usually 0.0-1.0.
-	 * Could be like -INF/INF.  Seen that happen.  Usually means something
-	 * bad happened.  I should probably check for this.  It's 2:00 AM.
-	 * XXX TODO FIXME check for this 
+	 * @return double representing error if SVR was used.
 	 */
 	public double getError()
 	{
@@ -249,23 +246,7 @@ public class Train
 			Logger.getAnonymousLogger().log(Level.SEVERE,"error in k fold " + e.getMessage());
 		}
 		
-	}
-	
-	/**
-	 * CTOR uses arbitrary default values<br><br>
-	 * 
-	 * For optimal results configure the svm parameters based
-	 * on your data or at least use one of the automagic configuration 
-	 * methods
-	 * 
-	 */
-	public Train()
-	{
-		
-
-
-	}
-	
+	}	
 	
 	/**
 	 * This method creates an svm_model based
