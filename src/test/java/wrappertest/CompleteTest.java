@@ -39,21 +39,78 @@ public class CompleteTest
 	{
 	}
 
-	/**
-	 * End to end test of svmwrapper
-	 */
 	@Test
 	public void test()
 	{
+		try
+		{
 
-		
+			// Raw data goes into DataElement objects
+			ArrayList<DataElement> elements = loadInputData();
+
+			// Perform scale operation
+			Scale.scale(elements, -1, 1);
+
+			// Split the list into train and test sets
+			ArrayList<DataElement> trainList = new ArrayList<DataElement>();
+			ArrayList<DataElement> predictList = new ArrayList<DataElement>();
+			for (DataElement e : elements)
+			{
+				if (e.isLabeled() == true)
+					trainList.add(e);
+				else if (e.isLabeled() == false) 
+					predictList.add(e);
+			}
+
+			// Attempt train and cross validation
+			Train t = new Train();
+			t.setData(trainList);
+			t.autoconfigureEpSVR();
+			t.train();
+
+			// Check the estimated accuracy
+			Logger.getAnonymousLogger().log(Level.INFO, "Accuracy: " + t.getAccuracy());
+
+			// Classify unlabeled samples
+			Predict.predict(t.getModel(), 0, predictList);
+
+			// Check labels
+			for (DataElement e : predictList)
+			{
+				Logger.getAnonymousLogger().log(Level.INFO, "Added label " + e.getClassLabel());
+				
+				// After calling predict() all entries in the List should
+				// have a class label
+				if (e.isLabeled() == false) 
+					fail();
+			}
+
+		}
+		catch (Exception ex)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE, ex.getMessage());
+			fail();
+		}
+	}
+	
+	/**
+	 * This is the file logic that reads in the test input file (in libsvm format)<br><br>
+	 * 
+	 * (placed here so as to simplify the test method above)<br><br>
+	 * 
+	 * @return ArrayList of {@link DataElement} objects representing the data
+	 */
+	private ArrayList<DataElement> loadInputData()
+	{
+
+		ArrayList<DataElement> elements = new ArrayList<>();
 		try (BufferedReader r = new BufferedReader(new FileReader(new File("src/test/data/sample.txt"))))
 		{
 
-			// Read input data
-			ArrayList<DataElement> elements = new ArrayList<>();
+			// Read input data			
 			for (String line = r.readLine(); line != null; line = r.readLine())
 			{
+				
 				DataElement de = new DataElement();
 				
 				String[] components = line.split(" ");
@@ -71,12 +128,8 @@ public class CompleteTest
 
 				
 				// Get the index:value pairs
-				// This does NOT support sparse Arrays
-				// Mostly because I don't use sparse arrays
-				// XXX TODO FIXME support sparse arrays
 				ArrayList<Double> data = new ArrayList<>();
 				String[] t = Arrays.copyOfRange(components, 1, components.length);
-				//for (String pair : Arrays.copyOfRange(components, 1, components.length))
 				for (int i = 0; i < t.length; i++)
 				{
 					String pair = t[i];
@@ -97,58 +150,13 @@ public class CompleteTest
 				de.setData(d);
 				
 				elements.add(de);
-			}
-			
-			// Perform scale operation
-			Scale.scale(elements,-1,1);	
-			
-			// Read scaled data
-			for (DataElement e : elements)
-			{
-				Double[] d = e.getData();
-				for (Double value : d)
-				{
-					if (value != DataElement.DO_NOT_PROCESS && (value < -1.0 || value > 1.0))
-						fail();
-				}
-			}
-			
-			// Split the list into train and test sets
-			ArrayList<DataElement> trainList = new ArrayList<DataElement>();			
-			ArrayList<DataElement> predictList = new ArrayList<DataElement>();			
-			for (DataElement e : elements)
-			{
-				if (e.isLabeled() == true)
-					trainList.add(e);
-				else if (e.isLabeled() == false)
-					predictList.add(e);
-			}
-			
-			// Attempt train and cross validation
-			Train t = new Train();
-			t.setData(trainList);
-			t.autoconfigureEpSVR();
-			t.train();
-
-			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy());
-			
-			// Classify unlabeled samples
-			Predict.predict(t.getModel(), 0, predictList);
-			
-			// Check labels
-			for (DataElement e : predictList)
-			{
-				Logger.getAnonymousLogger().log(Level.INFO,"Added label " +e.getClassLabel());
-				if (e.isLabeled() == false)
-					fail();
-			}
-
+			}			
 		}
-		catch (Exception ex)
+		catch (Exception e)
 		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,ex.getMessage());
+			Logger.getAnonymousLogger().log(Level.SEVERE,"Error reading inputs " + e.getMessage());
 			fail();
 		}
+		return elements;
 	}
-
 }

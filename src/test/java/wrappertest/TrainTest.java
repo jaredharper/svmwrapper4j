@@ -41,13 +41,53 @@ public class TrainTest
 	@Test
 	public void test()
 	{
+		try
+		{
 
-		
+			// Read input data
+			ArrayList<DataElement> elements = loadInputData();
+			
+			// Put labeled data in the training list
+			ArrayList<DataElement> trainList = new ArrayList<DataElement>();			
+			for (DataElement e : elements)
+			{
+				if (e.isLabeled() == true)
+					trainList.add(e);
+			}
+			
+			// Attempt train and cross validation
+			Train t = new Train();
+			t.setData(trainList);
+			t.autoconfigureEpSVR();
+			t.train();
+
+			// Note predicted accuracy
+			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy()
+					+ System.lineSeparator() + "Error: " + t.getError());
+
+		}
+		catch (Exception ex)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,ex.getMessage());
+			fail();
+		}
+	}
+	
+	/**
+	 * This is the file logic that reads in the test input file (in libsvm format)<br><br>
+	 * 
+	 * (placed here so as to simplify the test method above)<br><br>
+	 * 
+	 * @return ArrayList of {@link DataElement} representing the data
+	 */
+	public ArrayList<DataElement> loadInputData()
+	{
+
+		ArrayList<DataElement> elements = new ArrayList<>();
 		try (BufferedReader r = new BufferedReader(new FileReader(new File("src/test/data/a7xhl.scaled"))))
 		{
 
 			// Read input data
-			ArrayList<DataElement> elements = new ArrayList<>();
 			for (String line = r.readLine(); line != null; line = r.readLine())
 			{
 				
@@ -99,32 +139,12 @@ public class TrainTest
 				
 				elements.add(de);
 			}
-			
-			// Split the list into train and test sets
-			ArrayList<DataElement> trainList = new ArrayList<DataElement>();			
-			ArrayList<DataElement> predictList = new ArrayList<DataElement>();			
-			for (DataElement e : elements)
-			{
-				if (e.isLabeled() == true)
-					trainList.add(e);
-				else if (e.isLabeled() == false)
-					predictList.add(e);
-			}
-			
-			// Attempt train and cross validation
-			Train t = new Train();
-			t.setData(trainList);
-			t.autoconfigureEpSVR();
-			t.train();
-
-			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy()
-					+ System.lineSeparator() + "Error: " + t.getError());
-
 		}
-		catch (Exception ex)
+		catch (Exception e)
 		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,ex.getMessage());
+			Logger.getAnonymousLogger().log(Level.SEVERE,"Error reading inputs " + e.getMessage());
 			fail();
 		}
+		return elements;
 	}
 }

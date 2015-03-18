@@ -21,8 +21,6 @@ public class Scale
 	 */
 	public static void scale(List<DataElement> dv, int scaleMin, int scaleMax)
 	{
-
-		
 		
 		// Assume all input vectors are of the same size
 		int size = dv.get(0).getData().length;
