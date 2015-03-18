@@ -1,9 +1,6 @@
 package svmwrapper;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import libsvm.svm;
 import libsvm.svm_model;
@@ -23,34 +20,22 @@ public class Predict
 {
 
 	/**
-	 * Legacy method from libsvm - here it simply logs the message
-	 * rather than printing directly to the output device
-	 * 
-	 * @param s - Message to be logged
-	 */
-	static void info(String s) 
-	{
-		Logger.getAnonymousLogger().log(Level.INFO,s);
-	}
-
-	/**
 	 * This method fills in the predicted class label for unlabeled data.
 	 * 
 	 * @param model - the svm_model object created/populated by Train
 	 * @param predict_probability - whether or not to predict probability estimates
 	 * @param data - List of {@link DataElement} objects representing the data to be classified
 	 * 
+	 * <br><br>
+	 * If passed labeled data, this <b>will overwrite</b> the existing label 
+	 * if a new label is predicted.
+	 * 
 	 */
 	public static void predict(svm_model model, int predict_probability, List<DataElement> data)
 	{
-		int correct = 0;
-		int total = 0;
-		double error = 0;
-		double sumv = 0, sumy = 0, sumvv = 0, sumyy = 0, sumvy = 0;
 
-		int svm_type=svm.svm_get_svm_type(model);
-		int nr_class=svm.svm_get_nr_class(model);
-		double[] prob_estimates=null;
+		int svm_type = svm.svm_get_svm_type(model);
+		double[] prob_estimates = null;
 
 		for (DataElement d : data)
 		{			
@@ -81,9 +66,9 @@ public class Predict
 				x[j].value = thisData[k];			
 			}
 			
-			double target = d.getClassLabel();
+			// Pass node array to the correct prediction method
 			double v;
-			if (predict_probability==1 && (svm_type==svm_parameter.C_SVC || svm_type==svm_parameter.NU_SVC))
+			if (predict_probability == 1 && (svm_type == svm_parameter.C_SVC || svm_type == svm_parameter.NU_SVC))
 			{
 				v = svm.svm_predict_probability(model,x,prob_estimates);
 			}
@@ -92,36 +77,8 @@ public class Predict
 				v = svm.svm_predict(model,x);
 			}
 			
-			if (d.isLabeled() == false)
-			{
-				d.setClassLabel(v);
-			}
-				
-
-			if(v == target)
-				++correct;
-			error += (v-target)*(v-target);
-			sumv += v;
-			sumy += target;
-			sumvv += v*v;
-			sumyy += target*target;
-			sumvy += v*target;
-			++total;
+			// Fill in label
+			d.setClassLabel(v);
 		}
-		
-		if(svm_type == svm_parameter.EPSILON_SVR ||
-		   svm_type == svm_parameter.NU_SVR)
-		{
-			Predict.info("Mean squared error = "+error/total+" (regression)\n");
-			Predict.info("Squared correlation coefficient = "+
-				 ((total*sumvy-sumv*sumy)*(total*sumvy-sumv*sumy))/
-				 ((total*sumvv-sumv*sumv)*(total*sumyy-sumy*sumy))+
-				 " (regression)\n");
-		}
-		else
-			Predict.info("Accuracy = "+(double)correct/total*100+
-				 "% ("+correct+"/"+total+") (classification)\n");
 	}
-
-
 }
