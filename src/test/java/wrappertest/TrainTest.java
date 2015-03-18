@@ -13,14 +13,17 @@ import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.JUnit4;
 
 import svmwrapper.DataElement;
-import svmwrapper.Predict;
-import svmwrapper.Scale;
 import svmwrapper.Train;
 
-
+/**
+ * This test case reads in scaled data and trains a model, writing
+ * the expected (k-fold) accuracy/error values to the output device
+ * 
+ * @author jharper
+ *
+ */
 public class TrainTest
 {
 
@@ -35,9 +38,6 @@ public class TrainTest
 	{
 	}
 	
-	/**
-	 * End to end test of svmwrapper
-	 */
 	@Test
 	public void test()
 	{
@@ -50,8 +50,8 @@ public class TrainTest
 			ArrayList<DataElement> elements = new ArrayList<>();
 			for (String line = r.readLine(); line != null; line = r.readLine())
 			{
-				DataElement de = new DataElement();
 				
+				DataElement de = new DataElement();				
 				String[] components = line.split(" ");
 				
 				// Get the first token in the line, which is a class label
@@ -65,14 +65,9 @@ public class TrainTest
 					// Unlabeled data is expected
 				}
 
-				
 				// Get the index:value pairs
-				// This does NOT support sparse Arrays
-				// Mostly because I don't use sparse arrays
-				// XXX TODO FIXME support sparse arrays
 				ArrayList<Double> data = new ArrayList<>();
 				String[] t = Arrays.copyOfRange(components, 1, components.length);
-				//for (String pair : Arrays.copyOfRange(components, 1, components.length))
 				int lastIndex = 0;
 				for (int i = 0; i < t.length; i++)
 				{
