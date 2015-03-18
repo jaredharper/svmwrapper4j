@@ -53,7 +53,7 @@ public class ScaleTest
 		readFile(cliScaled, "src/test/data/scaled_sample.txt");
 		
 		// Perform scale operation		
-		Scale.scale(computed);	
+		Scale.scale(computed,-1,1);	
 		
 		// Compare computed scaled values to known values
 		if (cliScaled.size() != computed.size())
@@ -67,7 +67,7 @@ public class ScaleTest
 			
 			for (int j = 0; j < cli.length; j++)
 			{
-				if (cli[j] == DataElement.DO_NOT_PROCESS)
+				if (cli[j] == DataElement.DO_NOT_PROCESS || gen[j] == DataElement.DO_NOT_PROCESS)
 					continue;
 				else if (cli[j] != gen[j])
 					fail();
@@ -113,12 +113,15 @@ public class ScaleTest
 				ArrayList<Double> data = new ArrayList<>();
 				String[] t = Arrays.copyOfRange(components, 1, components.length);
 				//for (String pair : Arrays.copyOfRange(components, 1, components.length))
+				int lastIndex = -1;
 				for (int i = 0; i < t.length; i++)
 				{
 					String pair = t[i];
+					int index = -1;
 					Double d = 0.0;
 					try
 					{
+						index = Integer.parseInt(pair.split(":")[0]);
 						d = Double.parseDouble(pair.split(":")[1]);
 					}
 					catch (Exception e)
@@ -126,7 +129,14 @@ public class ScaleTest
 						Logger.getAnonymousLogger().log(Level.INFO,pair.toString());
 						fail();
 					}
-					data.add(d);
+					if (index > data.size())
+					{
+						while (lastIndex++ < index)
+						{
+							data.add(0.0);
+						}
+					}
+					data.add(index,d);
 				}
 				Double[] d = new Double[data.size()];
 				data.toArray(d);
@@ -137,7 +147,7 @@ public class ScaleTest
 		}
 		catch (Exception ex)
 		{
-			
+			fail();
 		}
 	}
 

@@ -5,8 +5,6 @@ import java.util.List;
 /**
  * This class contains logic to handle scaling operations.<br><br>
  * 
- * Currently scalining is fixed at -1,1<br><br>
- * 
  * Code is a simplified implementation of libSVM's provided svm_scale.java<br><br>
  * 
  * @author jharper
@@ -17,11 +15,11 @@ public class Scale
 
 	/**
 	 * This method takes a collection of DataElement objects and
-	 * scales their data to fit (-1,1)
+	 * scales their data to fit given range
 	 * 
 	 * @param dv List containing the {@link DataElement} objects to be modified
 	 */
-	public static void scale(List<DataElement> dv)
+	public static void scale(List<DataElement> dv, int scaleMin, int scaleMax)
 	{
 
 		
@@ -58,23 +56,19 @@ public class Scale
 			
 				/* 
 				 * skip single-valued attribute
-				 * 
-				 * for now just treat any scaled value outside 
-				 * the -1,1 range as a skip value.  need logic
-				 * in the train routine to check for this. 
 				 */
 				if (max[index] == min[index]) 
 					d[index] = DataElement.DO_NOT_PROCESS;
 				
 				/* min/max forced to [-1,1] */
 				else if (d[index] == min[index])
-					d[index] = -1.0;
+					d[index] = (double) scaleMin;
 				else if (d[index] == max[index])
-					d[index] = 1.0;
+					d[index] = (double) scaleMax;
 				
 				/* actual scaling calculation for common case */
 				else
-					d[index] = -1.0 + 2.0 * (d[index] - min[index]) / (max[index] - min[index]);
+					d[index] = -1.0 + (scaleMax - scaleMin) * (d[index] - min[index]) / (max[index] - min[index]);
 			}
 		}
 	}

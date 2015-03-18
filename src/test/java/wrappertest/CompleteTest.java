@@ -100,7 +100,7 @@ public class CompleteTest
 			}
 			
 			// Perform scale operation
-			Scale.scale(elements);	
+			Scale.scale(elements,-1,1);	
 			
 			// Read scaled data
 			for (DataElement e : elements)
