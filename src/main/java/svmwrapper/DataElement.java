@@ -45,6 +45,9 @@ public class DataElement
 	/**
 	 * Set the Double[] representing the actual data values
 	 * 
+	 * <br><br>missing data entries should be 
+	 * represented in the array as <b>DataElement.DO_NOT_PROCESS</b><br>
+	 * 
 	 * @param data
 	 */
 	public void setData(Double[] data)
