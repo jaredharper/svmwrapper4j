@@ -127,13 +127,13 @@ public class CompleteTest
 			// Attempt train and cross validation
 			Train t = new Train();
 			t.setData(trainList);
-			t.autoconfigureNuSVC();
+			t.autoconfigureEpSVR();
 			t.train();
 
 			Logger.getAnonymousLogger().log(Level.INFO,"Accuracy: " + t.getAccuracy());
 			
 			// Classify unlabeled samples
-			Predict.predict(t.getModel(), 0, elements);
+			Predict.predict(t.getModel(), 0, predictList);
 			
 			// Check labels
 			for (DataElement e : predictList)
