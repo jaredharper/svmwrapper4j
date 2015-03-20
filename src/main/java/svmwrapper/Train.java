@@ -35,6 +35,7 @@ public class Train
 	private int nr_fold;
 	private double accuracy;
 	private double error;
+	private HashMap<Double, Double> results;
 	private List<DataElement> data;
 
 	/**
@@ -57,6 +58,16 @@ public class Train
 	}
 	
 	/**
+	 * Accessor for the current object's accuracy value
+	 * 
+	 * @param accuracy
+	 */
+	public void setAccuracy(double accuracy)
+	{
+		this.accuracy = accuracy;
+	}
+	
+	/**
 	 * Get model error as computed by do_cross_validation().
 	 * 
 	 * @return double representing error if SVR was used.
@@ -74,6 +85,16 @@ public class Train
 	public void setData(List<DataElement> d)
 	{
 		data = d;
+	}
+	
+	/**
+	 * Accessor for the input data this Train object models
+	 * 
+	 * @return List< {@link DataElement} >
+	 */
+	public List<DataElement> getData()
+	{
+		return data;
 	}
 	
 	/**
@@ -103,6 +124,37 @@ public class Train
 	}
 	
 	/**
+	 * Accessor the number of folds for cross validation
+	 * 
+	 * @return number of folds
+	 */
+	public int getNrFold()
+	{
+		return nr_fold;
+	}
+	
+	/**
+	 * Mutator for the number of folds used by cross validation
+	 * 
+	 * @param nrFold number of folds
+	 */
+	public void setNrFold(int nrFold)
+	{
+		this.nr_fold = nrFold;
+	}
+	
+	/**
+	 * Accessor for the svm_probem used internally
+	 * by calls to the libsvm lib
+	 * 
+	 * @return svm_problem object used internally
+	 */
+	public svm_problem getProblem()
+	{
+		return prob;
+	}
+	
+	/**
 	 * This method will set the svm type to Nu SVC
 	 * and attempt to find a nu value that best
 	 * fits the data
@@ -112,85 +164,8 @@ public class Train
 	 */
 	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
 	{
-
-		param = new svm_parameter();
-		
-		param.svm_type = svm_parameter.NU_SVC;
-		param.kernel_type = svm_parameter.SIGMOID;
-
-		param.nu = 0.95;
-		param.gamma = 1d / (double) data.size();
-		param.coef0 = 0;
-		
-		param.p = 0.755;
-
-		param.cache_size = 100;		
-		param.shrinking = 1;
-		param.probability = 0;		
-		param.nr_weight = 0;
-		param.weight_label = new int[0];
-		param.weight = new double[0];
-		
-		nr_fold = 6;
-		
-		double bestAccuracy = 0;
-		HashMap<Double, Double> results = new HashMap<>();
-		
-		double[] nuVals = {0.1, 0.25, 0.33, 0.40, 0.5, 0.66, 0.75, 0.8, 0.95};
-		for (double n : nuVals)
-		{
-			param.nu = n;
-			read_problem();
-			
-			error_msg = svm.svm_check_parameter(prob, param);
-			if (error_msg != null && error_msg.equals("specified nu is infeasible"))
-			{
-				continue;
-			}
-			if (error_msg != null)
-			{
-				Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
-				throw new Exception("Error with parameter object");
-			}				
-			
-			nr_fold = data.size();
-			do_cross_validation();
-			
-			results.put(param.nu, accuracy);
-		}
-
-		for (Double key : results.keySet())
-		{
-			double accuracy = results.get(key);
-			if (accuracy > bestAccuracy)
-			{
-				bestAccuracy = accuracy;
-				param.nu = key;
-			}
-		}	
-		
-		accuracy = bestAccuracy;		
+		Autoconfigure.autoconfigureNuSvc(this);
 		return results;
-	}
-	
-	/**
-	 * This method will set the type to Nu SVR
-	 * and attempt to find a nu value that best
-	 * fits the data
-	 */
-	public void autoconfigureNuSVR()
-	{		
-		
-	}
-	
-	/**
-	 * This method will set the svm type to C SVC
-	 * and attempt to find a C value that best fits
-	 * the data
-	 */
-	public void autoconfigureC()
-	{
-		
 	}
 	
 	/**
@@ -334,7 +309,7 @@ public class Train
 	 * 
 	 * @throws IOException
 	 */
-	private void read_problem()
+	public void read_problem()
 	{
 		Vector<Double> vy = new Vector<Double>();
 		Vector<svm_node[]> vx = new Vector<svm_node[]>();
