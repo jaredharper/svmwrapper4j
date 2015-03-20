@@ -28,16 +28,6 @@ import svmwrapper.Scale;
 public class ScaleTest
 {
 
-	@Before
-	public void setUp() throws Exception
-	{
-	}
-
-	@After
-	public void tearDown() throws Exception
-	{
-	}
-
 	/**
 	 * Scale and compare
 	 */

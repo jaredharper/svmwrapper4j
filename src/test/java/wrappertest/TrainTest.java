@@ -27,17 +27,6 @@ import svmwrapper.Train;
 public class TrainTest
 {
 
-
-	@Before
-	public void setUp() throws Exception
-	{
-	}
-
-	@After
-	public void tearDown() throws Exception
-	{
-	}
-	
 	@Test
 	public void test()
 	{

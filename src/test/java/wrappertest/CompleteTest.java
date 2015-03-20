@@ -29,16 +29,6 @@ import svmwrapper.Train;
 public class CompleteTest
 {
 
-	@Before
-	public void setUp() throws Exception
-	{
-	}
-
-	@After
-	public void tearDown() throws Exception
-	{
-	}
-
 	@Test
 	public void test()
 	{
