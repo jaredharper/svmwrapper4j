@@ -117,7 +117,7 @@ public class TrainTest
 					{
 						while (lastIndex++ < index)
 						{
-							data.add(null);
+							data.add(DataElement.DO_NOT_PROCESS);
 						}
 					}
 					data.add(index,d);
