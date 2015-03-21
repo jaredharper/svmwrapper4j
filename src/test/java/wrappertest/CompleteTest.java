@@ -69,8 +69,7 @@ public class CompleteTest
 			{
 				Logger.getAnonymousLogger().log(Level.INFO, "Added label " + e.getClassLabel());
 				
-				// After calling predict() all entries in the List should
-				// have a class label
+				// After calling predict() all entries in the List should have a class label
 				if (e.isLabeled() == false) 
 					fail();
 			}

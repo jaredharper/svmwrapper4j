@@ -91,7 +91,7 @@ public class TrainTest
 				}
 				catch (NumberFormatException nfx)
 				{
-					// Unlabeled data is expected
+					fail();
 				}
 
 				// Get the index:value pairs
@@ -115,6 +115,8 @@ public class TrainTest
 					}
 					if (index > data.size())
 					{
+						
+						// Flag missing values in the input file
 						while (lastIndex++ < index)
 						{
 							data.add(DataElement.DO_NOT_PROCESS);

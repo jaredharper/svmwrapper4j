@@ -28,9 +28,6 @@ import svmwrapper.Scale;
 public class ScaleTest
 {
 
-	/**
-	 * Scale and compare
-	 */
 	@Test
 	public void test()
 	{
@@ -67,6 +64,7 @@ public class ScaleTest
 	 */
 	private ArrayList<DataElement> readFile(String filename)
 	{
+		
 		ArrayList<DataElement> elts = new ArrayList<DataElement>();
 		try (BufferedReader r = new BufferedReader(new FileReader(new File(filename))))
 		{
