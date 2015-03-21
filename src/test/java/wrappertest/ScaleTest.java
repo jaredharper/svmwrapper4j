@@ -31,7 +31,6 @@ public class ScaleTest
 	/**
 	 * Scale and compare
 	 */
-	@Ignore
 	@Test
 	public void test()
 	{
@@ -57,10 +56,11 @@ public class ScaleTest
 			
 			for (int j = 0; j < cli.length; j++)
 			{
-				if (cli[j] == DataElement.DO_NOT_PROCESS || gen[j] == DataElement.DO_NOT_PROCESS)
-					continue;
-				else if (cli[j] != gen[j])
+				if (Double.compare(cli[j], gen[j]) != 0)
+				{
 					fail();
+				}
+					
 			}
 		}
 	}
@@ -123,7 +123,7 @@ public class ScaleTest
 					{
 						while (lastIndex++ < index)
 						{
-							data.add(0.0);
+							data.add(DataElement.DO_NOT_PROCESS);
 						}
 					}
 					data.add(index,d);

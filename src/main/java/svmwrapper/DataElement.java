@@ -20,7 +20,7 @@ public class DataElement
 	/**
 	 * Flag to note that an array value should be skipped when creating a model
 	 */
-	public static final Double DO_NOT_PROCESS = null;
+	public static final Double DO_NOT_PROCESS = Double.NaN;
 	
 	/**
 	 * Flag used to determine if the class label has been initialized

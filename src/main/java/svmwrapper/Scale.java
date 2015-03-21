@@ -15,15 +15,23 @@ public class Scale
 
 	/**
 	 * This method takes a collection of DataElement objects and
-	 * scales their data to fit given range
+	 * scales their data to fit the given range
 	 * 
 	 * @param dv List containing the {@link DataElement} objects to be modified
 	 */
 	public static void scale(List<DataElement> dv, int scaleMin, int scaleMax)
 	{
 		
-		// Assume all input vectors are of the same size
-		int size = dv.get(0).getData().length;
+		// Find the largest input and use its length
+		// to size the min/max arrays
+		int size = 0;
+		for (int i = 0; i < dv.size(); i++)
+		{
+			int temp = dv.get(i).getData().length;
+			if (temp > size)
+				size = temp;
+		}
+		
 		double[] max = new double[size];
 		double[] min = new double[size];
 		
@@ -40,6 +48,8 @@ public class Scale
 			Double[] d = element.getData();
 			for (int i = 0; i < d.length; i++)
 			{
+				if (d[i] == DataElement.DO_NOT_PROCESS)
+					continue;
 				max[i] = Math.max(max[i], d[i]);
 				min[i] = Math.min(min[i], d[i]);
 			}
@@ -58,7 +68,7 @@ public class Scale
 				if (max[index] == min[index]) 
 					d[index] = DataElement.DO_NOT_PROCESS;
 				
-				/* min/max forced to [-1,1] */
+				/* min/max provided as input param */
 				else if (d[index] == min[index])
 					d[index] = (double) scaleMin;
 				else if (d[index] == max[index])
@@ -66,7 +76,14 @@ public class Scale
 				
 				/* actual scaling calculation for common case */
 				else
-					d[index] = -1.0 + (scaleMax - scaleMin) * (d[index] - min[index]) / (max[index] - min[index]);
+				{
+					double v = scaleMin + (scaleMax - scaleMin) * (d[index] - min[index]) / (max[index] - min[index]);
+					if (v != 0)
+						d[index] = v;
+					else
+						d[index] = DataElement.DO_NOT_PROCESS;
+				}
+					
 			}
 		}
 	}
