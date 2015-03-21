@@ -58,7 +58,7 @@ public class Train
 	}
 	
 	/**
-	 * Accessor for the current object's accuracy value
+	 * Mutator for the current object's accuracy value
 	 * 
 	 * @param accuracy
 	 */
@@ -88,7 +88,7 @@ public class Train
 	}
 	
 	/**
-	 * Accessor for the input data this Train object models
+	 * Accessor for the data used to create the model
 	 * 
 	 * @return List< {@link DataElement} >
 	 */
@@ -103,7 +103,7 @@ public class Train
 	 * 
 	 * Use this if you understand the technical details
 	 * behind svm type / kernel details and want to
-	 * configured an svm_parameter object manually.
+	 * configure an svm_parameter object manually.
 	 * 
 	 * @param param
 	 */
@@ -156,10 +156,11 @@ public class Train
 	
 	/**
 	 * This method will set the svm type to Nu SVC
-	 * and attempt to find a nu value that best
-	 * fits the data
+	 * and attempt to find a nu value that fits the data
 	 * 
 	 * @throws Exception - On unrecoverable error 
+	 * 
+	 * @return Map of nu values to the projected accuracy as computed by k-fold
 	 * 
 	 */
 	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
@@ -170,57 +171,13 @@ public class Train
 	
 	/**
 	 * This method will set the type to Epsilon SVR
-	 * and attempt to find an e value that best fits
+	 * and attempt to find a p value that fits
 	 * the data
 	 * 
 	 */
 	public void autoconfigureEpSVR()
 	{
-	
-		param = new svm_parameter();
-		
-		param.svm_type = svm_parameter.EPSILON_SVR;
-		param.kernel_type = svm_parameter.SIGMOID;
-
-		param.gamma = 0.000976563;
-		param.coef0 = 0;		
-		param.p = 0.25;
-
-		param.eps = 0.001;
-		param.C = 1;
-
-		param.nu = 0.5;
-		param.degree = 3;
-		param.cache_size = 100;		
-		param.shrinking = 1;
-		param.probability = 0;		
-		param.nr_weight = 0;
-		param.weight_label = new int[0];
-		param.weight = new double[0];
-		
-		nr_fold = 6;
-		
-		read_problem();
-		
-		error_msg = svm.svm_check_parameter(prob, param);
-		if (error_msg != null && error_msg.equals("specified nu is infeasible"))
-		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,"nu is infeasible");
-		}
-		if (error_msg != null)
-		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
-		}				
-
-		try
-		{
-			do_cross_validation();
-		}
-		catch (Exception e)
-		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,"error in k fold " + e.getMessage());
-		}
-		
+		Autoconfigure.autoconfigureEpSvr(this);		
 	}	
 	
 	/**

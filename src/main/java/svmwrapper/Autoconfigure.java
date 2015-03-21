@@ -15,10 +15,10 @@ import libsvm.svm_parameter;
  * in a semi-intelligent fashion for quick
  * prototyping.<br><br>
  * 
- * The purpose of this class is to offer speedy
- * convenience.  For in depth use you should
+ * The purpose of this class is to offer speed and
+ * convenience.  For maximum accuracy you should
  * be configuring the svm_parameter object
- * yourself.
+ * manually based on your data.
  * 
  * @author jharper
  *
@@ -105,8 +105,59 @@ public class Autoconfigure
 		}
 	}
 	
+	/**
+	 * Heuristic method for configuring an epsilon svr.
+	 * 
+	 * @param t
+	 */
 	public static void autoconfigureEpSvr(Train t)
 	{
+		String error_msg;
 		
+		svm_parameter param = new svm_parameter();
+		
+		param.svm_type = svm_parameter.EPSILON_SVR;
+		param.kernel_type = svm_parameter.SIGMOID;
+
+		param.gamma = 0.000976563;
+		param.coef0 = 0;		
+		param.p = 0.25;
+
+		param.eps = 0.001;
+		param.C = 1;
+
+		param.nu = 0.5;
+		param.degree = 3;
+		param.cache_size = 100;		
+		param.shrinking = 1;
+		param.probability = 0;		
+		param.nr_weight = 0;
+		param.weight_label = new int[0];
+		param.weight = new double[0];
+		
+		t.setParam(param);
+		
+		t.setNrFold(t.getData().size());
+		
+		t.read_problem();
+		
+		error_msg = svm.svm_check_parameter(t.getProblem(), param);
+		if (error_msg != null && error_msg.equals("specified nu is infeasible"))
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"nu is infeasible");
+		}
+		if (error_msg != null)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
+		}				
+
+		try
+		{
+			t.do_cross_validation();
+		}
+		catch (Exception e)
+		{
+			Logger.getAnonymousLogger().log(Level.SEVERE,"error in k fold " + e.getMessage());
+		}
 	}
 }
