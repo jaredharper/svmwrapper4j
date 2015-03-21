@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import svmwrapper.DataElement;
@@ -21,7 +19,7 @@ import svmwrapper.Train;
 
 /**
  * As implied, this is an end-to-end test demonstrating a complete workflow
- * (data gathering, scaling, training and ultimately prediction)
+ * (data gathering, scaling, training and ultimately prediction).
  * 
  * @author jharper
  *
@@ -52,7 +50,7 @@ public class CompleteTest
 					predictList.add(e);
 			}
 
-			// Attempt train and cross validation
+			// Configure and train the model
 			Train t = new Train();
 			t.setData(trainList);
 			t.autoconfigureEpSVR();

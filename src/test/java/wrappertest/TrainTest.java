@@ -10,16 +10,14 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import svmwrapper.DataElement;
 import svmwrapper.Train;
 
 /**
- * This test case reads in scaled data and trains a model, writing
- * the expected (k-fold) accuracy/error values to the output device
+ * This class tests Train by reading scaled data, configuring and training a model,
+ * and writing the (k-fold) accuracy/error values to the logger.
  * 
  * @author jharper
  *
@@ -44,7 +42,7 @@ public class TrainTest
 					trainList.add(e);
 			}
 			
-			// Attempt train and cross validation
+			// Configure and train model
 			Train t = new Train();
 			t.setData(trainList);
 			t.autoconfigureEpSVR();
