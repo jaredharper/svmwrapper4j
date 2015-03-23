@@ -12,10 +12,9 @@ package svmwrapper;
  */
 public class DataElement
 {
-	private Double[] data;
-	private double classLabel;
-	private boolean isLabeled = false;	
-	private int databaseId;
+	protected Double[] data;
+	protected double classLabel;
+	protected boolean isLabeled = false;	
 	
 	/**
 	 * Flag to note that an array value should be skipped when creating a model
@@ -73,16 +72,6 @@ public class DataElement
 	{
 		this.classLabel = v;
 		this.isLabeled = true;
-	}
-
-	public int getDatabaseId()
-	{
-		return databaseId;
-	}
-
-	public void setDatabaseId(int databaseId)
-	{
-		this.databaseId = databaseId;
 	}
 
 }
