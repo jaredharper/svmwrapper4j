@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import svmwrapper.DataElement;
+import svmwrapper.IDataElement;
 import svmwrapper.Train;
 
 /**
@@ -35,7 +36,7 @@ public class TrainTest
 			ArrayList<DataElement> elements = loadInputData();
 			
 			// Put labeled data in the training list
-			ArrayList<DataElement> trainList = new ArrayList<DataElement>();			
+			ArrayList<IDataElement> trainList = new ArrayList<IDataElement>();			
 			for (DataElement e : elements)
 			{
 				if (e.isLabeled() == true)

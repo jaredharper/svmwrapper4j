@@ -37,7 +37,7 @@ public class Autoconfigure
 		try
 		{
 			
-			List<DataElement> data = t.getData();
+			int dataSize = t.getDataSize();
 			String error_msg;
 			double accuracy;
 			
@@ -47,7 +47,7 @@ public class Autoconfigure
 			param.kernel_type = svm_parameter.SIGMOID;
 	
 			param.nu = 0.95;
-			param.gamma = 1d / (double) data.size();
+			param.gamma = 1d / (double) dataSize;
 			param.coef0 = 0;
 			
 			param.p = 0.755;
@@ -79,7 +79,7 @@ public class Autoconfigure
 					throw new Exception("Error with parameter object");
 				}				
 				
-				t.setNrFold(data.size());
+				t.setNrFold(dataSize);
 				t.do_cross_validation();
 				
 				results.put(param.nu, t.getAccuracy());
@@ -137,7 +137,7 @@ public class Autoconfigure
 		
 		t.setParam(param);
 		
-		t.setNrFold(t.getData().size());
+		t.setNrFold(t.getDataSize());
 		
 		t.read_problem();
 		

@@ -14,12 +14,12 @@ public class Scale
 {
 
 	/**
-	 * This method takes a collection of DataElement objects and
+	 * This method takes a collection of IDataElement objects and
 	 * scales their data to fit the given range
 	 * 
-	 * @param dv List containing the {@link DataElement} objects to be modified
+	 * @param dv List containing the {@link IDataElement} objects to be modified
 	 */
-	public static void scale(List<DataElement> dv, int scaleMin, int scaleMax)
+	public static void scale(List<? extends IDataElement> dv, int scaleMin, int scaleMax)
 	{
 		
 		// Find the largest input and use its length
@@ -43,12 +43,12 @@ public class Scale
 		}
 
 		// First iteration, find global min/max
-		for (DataElement element : dv)
+		for (IDataElement element : dv)
 		{
 			Double[] d = element.getData();
 			for (int i = 0; i < d.length; i++)
 			{
-				if (d[i] == DataElement.DO_NOT_PROCESS)
+				if (d[i] == IDataElement.DO_NOT_PROCESS)
 					continue;
 				max[i] = Math.max(max[i], d[i]);
 				min[i] = Math.min(min[i], d[i]);
@@ -56,7 +56,7 @@ public class Scale
 		}
 
 		// scale values
-		for (DataElement element : dv)
+		for (IDataElement element : dv)
 		{
 			Double[] d = element.getData();
 			for (int index = 0; index < d.length; index++)
@@ -66,7 +66,7 @@ public class Scale
 				 * skip single-valued attribute
 				 */
 				if (max[index] == min[index]) 
-					d[index] = DataElement.DO_NOT_PROCESS;
+					d[index] = IDataElement.DO_NOT_PROCESS;
 				
 				/* min/max provided as input param */
 				else if (d[index] == min[index])
@@ -81,7 +81,7 @@ public class Scale
 					if (v != 0)
 						d[index] = v;
 					else
-						d[index] = DataElement.DO_NOT_PROCESS;
+						d[index] = IDataElement.DO_NOT_PROCESS;
 				}
 					
 			}

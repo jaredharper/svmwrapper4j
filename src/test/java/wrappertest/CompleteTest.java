@@ -7,12 +7,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.Test;
 
 import svmwrapper.DataElement;
+import svmwrapper.IDataElement;
 import svmwrapper.Predict;
 import svmwrapper.Scale;
 import svmwrapper.Train;
@@ -40,8 +42,8 @@ public class CompleteTest
 			Scale.scale(elements, -1, 1);
 
 			// Split the list into train and test sets
-			ArrayList<DataElement> trainList = new ArrayList<DataElement>();
-			ArrayList<DataElement> predictList = new ArrayList<DataElement>();
+			ArrayList<IDataElement> trainList = new ArrayList<IDataElement>();
+			ArrayList<IDataElement> predictList = new ArrayList<IDataElement>();
 			for (DataElement e : elements)
 			{
 				if (e.isLabeled() == true)
@@ -63,7 +65,7 @@ public class CompleteTest
 			Predict.predict(t.getModel(), 0, predictList);
 
 			// Check labels
-			for (DataElement e : predictList)
+			for (IDataElement e : predictList)
 			{
 				Logger.getAnonymousLogger().log(Level.INFO, "Added label " + e.getClassLabel());
 				

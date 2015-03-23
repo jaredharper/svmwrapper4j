@@ -36,7 +36,7 @@ public class Train
 	private double accuracy;
 	private double error;
 	private HashMap<Double, Double> results;
-	private List<DataElement> data;
+	private List<IDataElement> data;
 
 	/**
 	 * Accessor for the svm_model that will be populated
@@ -80,21 +80,21 @@ public class Train
 	/**
 	 * Mutator for the input data needed to create the model
 	 * 
-	 * @param d - a List of {@link DataElement}
+	 * @param d - a List of {@link IDataElement}
 	 */
-	public void setData(List<DataElement> d)
+	public void setData(List<IDataElement> d)
 	{
 		data = d;
 	}
 	
 	/**
-	 * Accessor for the data used to create the model
+	 * Accessor for the number of data used to create the model
 	 * 
-	 * @return List< {@link DataElement} >
+	 * @return size of IDataElement collection
 	 */
-	public List<DataElement> getData()
+	public int getDataSize()
 	{
-		return data;
+		return data.size();
 	}
 	
 	/**
@@ -262,7 +262,7 @@ public class Train
 	}
 
 	/**
-	 * Convert the DataElement List to svm_node and svm_problem objects
+	 * Convert the IDataElement List to svm_node and svm_problem objects
 	 * 
 	 * @throws IOException
 	 */
@@ -272,7 +272,7 @@ public class Train
 		Vector<svm_node[]> vx = new Vector<svm_node[]>();
 		int max_index = 0;
 
-		for (DataElement d : data)
+		for (IDataElement d : data)
 		{						
 			
 			vy.addElement((double) d.getClassLabel());
@@ -284,7 +284,7 @@ public class Train
 			int numValidEntries = 0;
 			for (int k = 0; k < thisData.length; k++)
 			{
-				if (thisData[k] != DataElement.DO_NOT_PROCESS)
+				if (thisData[k] != IDataElement.DO_NOT_PROCESS)
 					numValidEntries++;				
 			}
 			
@@ -295,7 +295,7 @@ public class Train
 				
 				// Get next index:value pair from thisData that
 				// isn't flagged as DO NOT PROCESS and add to x				
-				while (thisData[k] == DataElement.DO_NOT_PROCESS)
+				while (thisData[k] == IDataElement.DO_NOT_PROCESS)
 					k++;
 								
 				x[j] = new svm_node();

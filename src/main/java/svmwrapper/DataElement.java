@@ -10,32 +10,29 @@ package svmwrapper;
  * @author jharper
  *
  */
-public class DataElement
+public class DataElement implements IDataElement
 {
 	protected Double[] data;
 	protected double classLabel;
 	protected boolean isLabeled = false;	
 	
 	/**
-	 * Flag to note that an array value should be skipped when creating a model
-	 */
-	public static final Double DO_NOT_PROCESS = Double.NaN;
-	
-	/**
 	 * Flag used to determine if the class label has been initialized
 	 * 
 	 * @return true if the class label has been set, false if not
 	 */
+	@Override
 	public boolean isLabeled()
 	{
 		return isLabeled;
 	}
 	
 	/**
-	 * Get the Double[] representing the actual data values
+	 * Get number of data values
 	 * 
 	 * @return
 	 */
+	@Override
 	public Double[] getData()
 	{
 		return data;
@@ -49,6 +46,7 @@ public class DataElement
 	 * 
 	 * @param data
 	 */
+	@Override
 	public void setData(Double[] data)
 	{
 		this.data = data;
@@ -59,6 +57,7 @@ public class DataElement
 	 * 
 	 * @return
 	 */
+	@Override
 	public double getClassLabel()
 	{
 		return classLabel;
@@ -68,6 +67,7 @@ public class DataElement
 	 * Set the class label to the provided value and mark it as set
 	 * @param v
 	 */
+	@Override
 	public void setClassLabel(double v)
 	{
 		this.classLabel = v;

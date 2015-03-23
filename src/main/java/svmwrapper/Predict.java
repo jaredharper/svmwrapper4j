@@ -1,5 +1,6 @@
 package svmwrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import libsvm.svm;
@@ -24,20 +25,20 @@ public class Predict
 	 * 
 	 * @param model - the svm_model object created/populated by Train
 	 * @param predict_probability - whether or not to predict probability estimates
-	 * @param data - List of {@link DataElement} objects representing the data to be classified
+	 * @param data - List of {@link IDataElement} objects representing the data to be classified
 	 * 
 	 * <br><br>
 	 * If passed labeled data, this <b>will overwrite</b> the existing label 
 	 * if a new label is predicted.
 	 * 
 	 */
-	public static void predict(svm_model model, int predict_probability, List<DataElement> data)
+	public static void predict(svm_model model, int predict_probability, List<? extends IDataElement> data)
 	{
 
 		int svm_type = svm.svm_get_svm_type(model);
 		double[] prob_estimates = null;
 
-		for (DataElement d : data)
+		for (IDataElement d : data)
 		{			
 			Double[] thisData = d.getData();
 			
@@ -46,7 +47,7 @@ public class Predict
 			int numValidEntries = 0;
 			for (int k = 0; k < thisData.length; k++)
 			{
-				if (thisData[k] != DataElement.DO_NOT_PROCESS)
+				if (thisData[k] != IDataElement.DO_NOT_PROCESS)
 					numValidEntries++;				
 			}
 			
@@ -58,7 +59,7 @@ public class Predict
 				
 				// Get next index:value pair from thisData that
 				// isn't flagged as DO NOT PROCESS and add to x				
-				while (thisData[k] == DataElement.DO_NOT_PROCESS)
+				while (thisData[k] == IDataElement.DO_NOT_PROCESS)
 					k++;
 								
 				x[j] = new svm_node();
