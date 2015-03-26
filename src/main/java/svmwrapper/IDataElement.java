@@ -55,5 +55,11 @@ public interface IDataElement
 	 */
 	public void setClassLabel(double v);
 
+	/**
+	 * Return a deep copy of this object
+	 * 
+	 * @return
+	 */
+	public IDataElement clone();
 	
 }

@@ -73,5 +73,26 @@ public class DataElement implements IDataElement
 		this.classLabel = v;
 		this.isLabeled = true;
 	}
+	
+	/**
+	 * Return a deep copy of this
+	 */
+	@Override
+	public IDataElement clone()
+	{
+		DataElement e = new DataElement();
+		
+		// Deep copy data
+		Double[] newData = new Double[data.length];
+		for (int i = 0; i < data.length; i++)
+			newData[i] = data[i];
+		e.setData(newData);
+		
+		// Set label if appropriate
+		if (isLabeled)
+			e.setClassLabel(classLabel);
+		
+		return e;
+	}
 
 }
