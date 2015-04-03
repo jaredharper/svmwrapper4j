@@ -51,6 +51,7 @@ public class Autoconfigure
 			param.coef0 = 0;
 			
 			param.p = 0.755;
+			param.eps = 0.001;
 	
 			param.cache_size = 100;		
 			param.shrinking = 1;
@@ -58,7 +59,10 @@ public class Autoconfigure
 			param.nr_weight = 0;
 			param.weight_label = new int[0];
 			param.weight = new double[0];
-						
+			
+			t.setParam(param);
+			t.setNrFold(dataSize);	
+			
 			double bestAccuracy = 0;
 			HashMap<Double, Double> results = new HashMap<>();
 			
@@ -66,6 +70,7 @@ public class Autoconfigure
 			for (double n : nuVals)
 			{
 				param.nu = n;
+				
 				t.read_problem();
 				
 				error_msg = svm.svm_check_parameter(t.getProblem(), param);
@@ -79,7 +84,6 @@ public class Autoconfigure
 					throw new Exception("Error with parameter object");
 				}				
 				
-				t.setNrFold(dataSize);
 				t.do_cross_validation();
 				
 				results.put(param.nu, t.getAccuracy());
