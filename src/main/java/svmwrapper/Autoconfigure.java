@@ -44,13 +44,13 @@ public class Autoconfigure
 			svm_parameter param = new svm_parameter();
 			
 			param.svm_type = svm_parameter.NU_SVC;
-			param.kernel_type = svm_parameter.SIGMOID;
+			param.kernel_type = svm_parameter.RBF;
 	
-			param.nu = 0.95;
+			param.nu = 0.5;
 			param.gamma = 1d / (double) dataSize;
 			param.coef0 = 0;
 			
-			param.p = 0.755;
+			param.p = 0.1;
 			param.eps = 0.001;
 	
 			param.cache_size = 100;		
