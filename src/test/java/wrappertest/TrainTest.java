@@ -45,8 +45,9 @@ public class TrainTest
 			
 			// Configure and train model
 			Train t = new Train();
-			t.setData(trainList);
-			t.autoconfigureEpSVR();
+			t.setData(trainList);			
+			t.setQuiet(true);
+			t.autoconfigureNuSVC();
 			t.train();
 
 			// Note predicted accuracy

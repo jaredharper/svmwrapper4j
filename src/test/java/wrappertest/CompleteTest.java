@@ -55,7 +55,7 @@ public class CompleteTest
 			// Configure and train the model
 			Train t = new Train();
 			t.setData(trainList);
-			t.autoconfigureEpSVR();
+			t.autoconfigureNuSVC();
 			t.train();
 
 			// Check the estimated accuracy

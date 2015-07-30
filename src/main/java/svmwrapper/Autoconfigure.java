@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import libsvm.svm;
 import libsvm.svm_parameter;
+import libsvm.svm_print_interface;
 
 /**
  * This class contains logic to configure
@@ -41,13 +42,21 @@ public class Autoconfigure
 			String error_msg;
 			double accuracy;
 			
+			if (t.isQuiet())
+				svm.svm_set_print_string_function(new svm_print_interface()
+				{
+					
+					@Override
+					public void print(String s)	{}
+				});
+			
 			svm_parameter param = new svm_parameter();
 			
 			param.svm_type = svm_parameter.NU_SVC;
 			param.kernel_type = svm_parameter.RBF;
 	
 			param.nu = 0.5;
-			param.gamma = 1d / (double) dataSize;
+			param.gamma = 1d / 2048d;
 			param.coef0 = 0;
 			
 			param.p = 0.1;
@@ -66,8 +75,7 @@ public class Autoconfigure
 			double bestAccuracy = 0;
 			HashMap<Double, Double> results = new HashMap<>();
 			
-			double[] nuVals = {0.1, 0.25, 0.33, 0.40, 0.5, 0.66, 0.75, 0.8, 0.95};
-			for (double n : nuVals)
+			for (double n = 0.05; n <= 1.; n += 0.05)
 			{
 				param.nu = n;
 				
@@ -109,59 +117,4 @@ public class Autoconfigure
 		}
 	}
 	
-	/**
-	 * Heuristic method for configuring an epsilon svr.
-	 * 
-	 * @param t
-	 */
-	public static void autoconfigureEpSvr(Train t)
-	{
-		String error_msg;
-		
-		svm_parameter param = new svm_parameter();
-		
-		param.svm_type = svm_parameter.EPSILON_SVR;
-		param.kernel_type = svm_parameter.SIGMOID;
-
-		param.gamma = 0.000976563;
-		param.coef0 = 0;		
-		param.p = 0.25;
-
-		param.eps = 0.001;
-		param.C = 1;
-
-		param.nu = 0.5;
-		param.degree = 3;
-		param.cache_size = 100;		
-		param.shrinking = 1;
-		param.probability = 0;		
-		param.nr_weight = 0;
-		param.weight_label = new int[0];
-		param.weight = new double[0];
-		
-		t.setParam(param);
-		
-		t.setNrFold(t.getDataSize());
-		
-		t.read_problem();
-		
-		error_msg = svm.svm_check_parameter(t.getProblem(), param);
-		if (error_msg != null && error_msg.equals("specified nu is infeasible"))
-		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,"nu is infeasible");
-		}
-		if (error_msg != null)
-		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,"Error with parameter object");
-		}				
-
-		try
-		{
-			t.do_cross_validation();
-		}
-		catch (Exception e)
-		{
-			Logger.getAnonymousLogger().log(Level.SEVERE,"error in k fold " + e.getMessage());
-		}
-	}
 }

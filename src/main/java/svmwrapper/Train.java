@@ -11,6 +11,7 @@ import libsvm.svm;
 import libsvm.svm_model;
 import libsvm.svm_node;
 import libsvm.svm_parameter;
+import libsvm.svm_print_interface;
 import libsvm.svm_problem;
 
 /**
@@ -37,6 +38,9 @@ public class Train
 	private double error;
 	private HashMap<Double, Double> results;
 	private List<IDataElement> data;
+	private boolean quiet = false;
+	
+	private static svm_print_interface svm_print_string = null;
 
 	/**
 	 * Accessor for the svm_model that will be populated
@@ -152,8 +156,62 @@ public class Train
 	public svm_problem getProblem()
 	{
 		return prob;
+	}	
+
+	/**
+	 * If standard libsvm messages will be printed to the output device
+	 * 
+	 */
+	public boolean isQuiet()
+	{
+		return quiet;
 	}
-	
+
+	/**
+	 * Set to true if you want to disable libsvm messages on the console.
+	 * Default value is false.
+	 * 
+	 * @param quiet
+	 */
+	public void setQuiet(boolean quiet)
+	{
+		this.quiet = quiet;
+	}
+
+	/**
+	 * This enables or disables diagnostic output.
+	 * 
+	 * In many cases (web services, etc) you may want to disable
+	 * output so your log files aren't quite so large.  This is often
+	 * useful for development or debugging purposes but can be cumbersome
+	 * in production environments
+	 * 
+	 * @param status - true if libsvm messages should be written to the output device
+	 */
+	private void setLoggingStatus(boolean status)
+	{
+		if (status == true)
+		{
+			svm_print_string = new svm_print_interface()
+			{				
+				@Override
+				public void print(String s)
+				{
+					Logger.getAnonymousLogger().log(Level.INFO,s);
+				}
+			};
+		}
+		else
+		{
+			svm_print_string = new svm_print_interface()
+			{				
+				@Override
+				public void print(String s)	{}
+			};
+			
+		}
+	}
+
 	/**
 	 * This method will set the svm type to Nu SVC
 	 * and attempt to find a nu value that fits the data
@@ -165,20 +223,10 @@ public class Train
 	 */
 	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
 	{
+		setLoggingStatus(quiet);
 		Autoconfigure.autoconfigureNuSvc(this);
 		return results;
 	}
-	
-	/**
-	 * This method will set the type to Epsilon SVR
-	 * and attempt to find a p value that fits
-	 * the data
-	 * 
-	 */
-	public void autoconfigureEpSVR()
-	{
-		Autoconfigure.autoconfigureEpSvr(this);		
-	}	
 	
 	/**
 	 * This method creates an svm_model based
@@ -193,6 +241,10 @@ public class Train
 	 */
 	public void train() throws Exception
 	{
+		
+		setLoggingStatus(quiet);
+		svm.svm_set_print_string_function(svm_print_string);
+		
 		read_problem();
 		
 		error_msg = svm.svm_check_parameter(prob, param);
