@@ -1,4 +1,4 @@
-package svmwrapper;
+package com.github.jaredharper.svmwrapper4j.libsvm;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.github.jaredharper.svmwrapper4j.config.Autoconfigure;
+import com.github.jaredharper.svmwrapper4j.pojo.IDataElement;
 
 import libsvm.svm;
 import libsvm.svm_model;
@@ -18,10 +21,8 @@ import libsvm.svm_problem;
  * This class contains logic to create, train and cross-validate
  * the SVM/SVR.<br><br>
  * 
- * Code is a simplified version of libsvm's svm_train.java<br><br>
- * 
- * To use: <br> instantiate <br>call setData() with your data<br> call an autoconfigure method<br> call train()<br> then get the populated
- * model with getModel()
+ * <b>Code is a simplified version of svm_train.java</b>.  Where possible
+ * the existing libSVM idioms / naming conventions / etc have been left in place.<br><br>
  * 
  * @author jharper
  *
@@ -46,7 +47,7 @@ public class Train
 		@Override
 		public void print(String s)
 		{
-			Logger.getAnonymousLogger().log(Level.INFO,s);
+			System.out.println(s);
 		}
 	};
 
@@ -82,7 +83,7 @@ public class Train
 	/**
 	 * Get model error as computed by do_cross_validation().
 	 * 
-	 * @return double representing error if SVR was used.
+	 * @return double representing error if SVR was used.  0.0 otherwise.
 	 */
 	public double getError()
 	{
@@ -156,7 +157,7 @@ public class Train
 	}
 	
 	/**
-	 * Accessor for the svm_probem used internally
+	 * Accessor for the svm_problem used internally
 	 * by calls to the libsvm lib
 	 * 
 	 * @return svm_problem object used internally
@@ -199,7 +200,7 @@ public class Train
 				@Override
 				public void print(String s)
 				{
-					Logger.getAnonymousLogger().log(Level.INFO,s);
+					System.out.println(s);
 				}
 			};
 		}
@@ -207,11 +208,14 @@ public class Train
 
 	/**
 	 * Logging is enabled by default and can be disabled by calling
-	 * setQuiet(true).  If you want to override the default logging
+	 * setQuiet(true).  
+	 * 
+	 * If you want to override the default logging options (e.g. write
+	 * logs to a file instead of the output device)
 	 * implement an svm_print_interface object (overriding the print
 	 * method) and pass it to the Train object with this method.
 	 * 
-	 * 
+	 * @param svmPrinter - object implementing the svm_print_interface
 	 */
 	public static void setSvmPrinter(svm_print_interface svmPrinter)
 	{

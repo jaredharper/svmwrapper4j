@@ -1,4 +1,4 @@
-package svmwrapper;
+package com.github.jaredharper.svmwrapper4j.pojo;
 
 /**
  * POJO wrapper for a data element used by libSVM<br><br>

@@ -1,4 +1,4 @@
-package svmwrapper;
+package com.github.jaredharper.svmwrapper4j.pojo;
 
 /**
  * Interface definition for a Data element.  Mainly, a data element

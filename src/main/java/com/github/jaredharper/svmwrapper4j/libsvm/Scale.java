@@ -1,11 +1,14 @@
-package svmwrapper;
+package com.github.jaredharper.svmwrapper4j.libsvm;
 
 import java.util.List;
+
+import com.github.jaredharper.svmwrapper4j.pojo.IDataElement;
 
 /**
  * This class contains logic to handle scaling operations.<br><br>
  * 
- * Code is a simplified implementation of libSVM's provided svm_scale.java<br><br>
+ * <b>Code is a simplified implementation of svm_scale.java</b>.  Where possible
+ * the existing libSVM idioms / naming conventions / etc have been left in place.<br><br>
  * 
  * @author jharper
  *

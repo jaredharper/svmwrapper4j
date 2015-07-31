@@ -1,14 +1,13 @@
-package svmwrapper;
+package com.github.jaredharper.svmwrapper4j.config;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.github.jaredharper.svmwrapper4j.libsvm.Train;
+
 import libsvm.svm;
 import libsvm.svm_parameter;
-import libsvm.svm_print_interface;
 
 /**
  * This class contains logic to configure
@@ -40,7 +39,6 @@ public class Autoconfigure
 			
 			int dataSize = t.getDataSize();
 			String error_msg;
-			double accuracy;
 			
 			svm_parameter param = new svm_parameter();
 			

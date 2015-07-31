@@ -1,4 +1,4 @@
-package wrappertest;
+package com.github.jaredharper.wrappertest;
 
 import static org.junit.Assert.*;
 
@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import svmwrapper.DataElement;
-import svmwrapper.Scale;
+import com.github.jaredharper.svmwrapper4j.libsvm.Scale;
+import com.github.jaredharper.svmwrapper4j.pojo.DataElement;
 
 /**
  * This class tests Scale. It validates the output of the scale method
