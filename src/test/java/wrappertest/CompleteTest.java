@@ -55,6 +55,7 @@ public class CompleteTest
 			// Configure and train the model
 			Train t = new Train();
 			t.setData(trainList);
+			t.setQuiet(true);
 			t.autoconfigureNuSVC();
 			t.train();
 

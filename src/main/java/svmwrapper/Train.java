@@ -40,7 +40,15 @@ public class Train
 	private List<IDataElement> data;
 	private boolean quiet = false;
 	
-	private static svm_print_interface svm_print_string = null;
+	// Default setting is to print diagnostic info
+	private static svm_print_interface svmPrinter = new svm_print_interface()
+	{				
+		@Override
+		public void print(String s)
+		{
+			Logger.getAnonymousLogger().log(Level.INFO,s);
+		}
+	};
 
 	/**
 	 * Accessor for the svm_model that will be populated
@@ -176,23 +184,17 @@ public class Train
 	public void setQuiet(boolean quiet)
 	{
 		this.quiet = quiet;
-	}
-
-	/**
-	 * This enables or disables diagnostic output.
-	 * 
-	 * In many cases (web services, etc) you may want to disable
-	 * output so your log files aren't quite so large.  This is often
-	 * useful for development or debugging purposes but can be cumbersome
-	 * in production environments
-	 * 
-	 * @param status - true if libsvm messages should be written to the output device
-	 */
-	private void setLoggingStatus(boolean status)
-	{
-		if (status == true)
+		if (quiet)
+		{			
+			svmPrinter = new svm_print_interface()
+			{				
+				@Override
+				public void print(String s)	{}
+			};
+		}
+		else
 		{
-			svm_print_string = new svm_print_interface()
+			svmPrinter = new svm_print_interface()
 			{				
 				@Override
 				public void print(String s)
@@ -201,15 +203,19 @@ public class Train
 				}
 			};
 		}
-		else
-		{
-			svm_print_string = new svm_print_interface()
-			{				
-				@Override
-				public void print(String s)	{}
-			};
-			
-		}
+	}
+
+	/**
+	 * Logging is enabled by default and can be disabled by calling
+	 * setQuiet(true).  If you want to override the default logging
+	 * implement an svm_print_interface object (overriding the print
+	 * method) and pass it to the Train object with this method.
+	 * 
+	 * 
+	 */
+	public static void setSvmPrinter(svm_print_interface svmPrinter)
+	{
+		Train.svmPrinter = svmPrinter;
 	}
 
 	/**
@@ -223,7 +229,6 @@ public class Train
 	 */
 	public HashMap<Double,Double> autoconfigureNuSVC() throws Exception
 	{
-		setLoggingStatus(quiet);
 		Autoconfigure.autoconfigureNuSvc(this);
 		return results;
 	}
@@ -242,8 +247,7 @@ public class Train
 	public void train() throws Exception
 	{
 		
-		setLoggingStatus(quiet);
-		svm.svm_set_print_string_function(svm_print_string);
+		svm.svm_set_print_string_function(svmPrinter);
 		
 		read_problem();
 		
@@ -268,6 +272,8 @@ public class Train
 	 */
 	public void do_cross_validation() throws Exception
 	{
+		
+		svm.svm_set_print_string_function(svmPrinter);
 		
 		if (nr_fold == 0)
 			throw new Exception("Cannot perform k-fold with a k value of 0");

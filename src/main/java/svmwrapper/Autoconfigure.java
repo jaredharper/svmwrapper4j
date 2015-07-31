@@ -42,14 +42,6 @@ public class Autoconfigure
 			String error_msg;
 			double accuracy;
 			
-			if (t.isQuiet())
-				svm.svm_set_print_string_function(new svm_print_interface()
-				{
-					
-					@Override
-					public void print(String s)	{}
-				});
-			
 			svm_parameter param = new svm_parameter();
 			
 			param.svm_type = svm_parameter.NU_SVC;
