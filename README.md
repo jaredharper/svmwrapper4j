@@ -1,5 +1,4 @@
 # svmwrapper4j
-libsvm_wrapper
 
 svmwrapper4j is intended to provide a simple library to mimic the conventions and idioms used by the libSVM command line tools.
 
