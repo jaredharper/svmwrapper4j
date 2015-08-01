@@ -42,5 +42,11 @@ A DataElement object can be instantiated simply:
 			// Creating a DataElement object
 			DataElement e = new DataElement();
 			
-			Double[] myData = 
+			// Your data goes in an array of type Double
+			Double[] myData = methodToPopulateMyData();
 			e.setData(myData);
+			
+			// The class label is optional
+			e.setLabel(1.0);
+
+The DataElement e is now ready to be used by svmwrapper4j.
