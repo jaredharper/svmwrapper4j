@@ -24,12 +24,8 @@ Example usage (from CompleteTest.java):
 			// Configure and train the model
 			Train t = new Train();
 			t.setData(trainList);
-			t.setQuiet(true);
 			t.autoconfigureNuSVC();
 			t.train();
-
-			// Check the estimated accuracy
-			Logger.getAnonymousLogger().log(Level.INFO, "Accuracy: " + t.getAccuracy());
 
 			// Classify unlabeled samples
 			Predict.predict(t.getModel(), 0, predictList);
