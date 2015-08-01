@@ -43,6 +43,6 @@ A DataElement object can be instantiated simply:
 			e.setData(myData);
 			
 			// The class label is optional
-			e.setLabel(1.0);
+			e.setClassLabel(1.0);
 
 The DataElement e is now ready to be used by svmwrapper4j.
