@@ -1,8 +1,6 @@
 # svmwrapper4j
 
-svmwrapper4j is intended to provide a simple library to mimic the conventions and idioms used by the libSVM command line tools.
-
-Scale.java, Train.java and Predict.java are based on svm_scale, svm_train and svm_predict (respectively).
+svmwrapper4j provides a simple library to mimic the conventions and idioms used by the libSVM command line tools.  If you are familiar with using libSVM interactively, then svmwrapper4j allows you to quickly add the same logic to your java applications.
 
 Example usage (from CompleteTest.java):
 
@@ -36,12 +34,13 @@ Example usage (from CompleteTest.java):
 			// Classify unlabeled samples
 			Predict.predict(t.getModel(), 0, predictList);
 
-			// Check labels
-			for (IDataElement e : predictList)
-			{
-				Logger.getAnonymousLogger().log(Level.INFO, "Added label " + e.getClassLabel());
-				
-				// After calling predict() all entries in the List should have a class label
-				if (e.isLabeled() == false) 
-					fail();
-			}
+
+In the above example, all DataElements in predictList are now classified.  The predicted label can be accessed by the dataElement's getLabel() method.
+
+A DataElement object can be instantiated simply:
+
+			// Creating a DataElement object
+			DataElement e = new DataElement();
+			
+			Double[] myData = 
+			e.setData(myData);
