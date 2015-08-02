@@ -31,9 +31,9 @@ Example usage (from CompleteTest.java):
 			Predict.predict(t.getModel(), 0, predictList);
 
 
-In the above example, all DataElements in predictList are now classified.  The predicted label can be accessed by the dataElement's getLabel() method.
+In the above example, all DataElements in predictList are now classified.  The predicted label can be accessed by the dataElement's getClassLabel() method.
 
-A DataElement object can be instantiated simply:
+A DataElement object (which represents a line in a libSVM formatted input file) can be instantiated simply:
 
 			// Creating a DataElement object
 			DataElement e = new DataElement();
